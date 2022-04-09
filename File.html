@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title></title>
+    <link rel="stylesheet" href="">
+</head>
+
+<body>
+<!-- 进度条案例 -->
+<div class="sty" style="width: 0px; height: 18px;line-height: 18px; background-color: red;">0 %</div>
+<!-- 表单注意事项 -->
+<form action="">
+    <input type="text" name="username"> 账号：
+    <br>
+    <input type="password" name="password"> 密码：
+    <br>
+    <input type="submit" value="send">
+</form>
+
+
+<!--
+    Blob:
+    a 标签的新功能： 如果 当前跳转地址是同源的就会实现下载功能
+ -->
+
+<!-- <a href="" download>跳转</a> -->
+
+<a id="skip">跳转</a>
+<input type="file" id="Input">
+
+<script type="text/javascript">
+  // 表单的默认行为（本质）会改变URL，我们不想表单的默认行为就是Ajax页面无刷新技术
+  var form = document.forms[0];
+  form.onsubmit = function (even) {
+    console.log(1111);
+    console.log(form.elements.username === form.elements[0]);
+
+    // 通过 返回一个false 阻止表单默认行为
+    // return false
+
+
+    // 通过 event 上的一个属性 阻止默认行为
+    // let e = e || window.event
+    // e.preventDefault()
+  }
+
+  var input = form.elements[0]
+  input.onfocus = function () {
+    console.log("focus");
+  }
+
+  input.onblur = function () {
+    console.log("blur");
+  }
+
+  input.onchange = function () {
+    console.log("change");
+  }
+
+  input.oninput = function () {
+    console.log("input");
+  }
+
+
+  // 进度条案例
+  let schedule = document.getElementsByClassName("sty")[0];
+  schedule.onclick = () => {
+    let timer = requestAnimationFrame(
+      function fn() {
+        if (parseInt(schedule.style.width) < 300) {
+          schedule.style.width = parseInt(schedule.style.width) + 3 + "px"
+          schedule.innerHTML = parseInt(schedule.style.width) / 3 + "%"
+          timer = requestAnimationFrame(fn)
+        } else {
+          cancelAnimationFrame(timer)
+        }
+      })
+  }
+
+
+  // base64 编码是怎么实现的 ?
+  // base64 是每6位截取一次，将需要转换的字符串转换成二进制数进行转换
+
+  let strUpper = new Array(26)
+    .fill(65)
+    .map((item, index) => String.fromCodePoint(item + index))
+    .join("");
+
+  let strLower = new Array(26)
+    .fill(97)
+    .map((item, index) => String.fromCodePoint(item + index))
+    .join("")
+
+  let base64Code = strUpper + strLower + "0123456789+/"
+
+  function base64(str) {
+
+    let code = "",
+      encode = "",
+      res = "";
+
+    code = str.split("").reduce((prev, item) => {
+      return prev + item.charCodeAt()
+        .toString(2)
+        .padStart(8, '0')
+    }, "");
+    // console.log(code);
+
+    if (code.length % 24 === 8) {
+      code += "0000"   // 12 - 8
+      res += "=="
+    }
+
+    if (code.length % 24 === 16) {
+      code += "00" // 18 -16
+      res += "="
+    }
+
+
+    for (let i = 0; i < code.length; i += 6) {
+      // +6 : 是因为base64是按照6位进行切分的
+      const element = code.slice(i, i + 6)
+      console.log(element);
+      encode += base64Code[parseInt(element, 2)]
+    }
+
+    return encode + res
+  }
+
+  console.log(base64("study"));
+
+
+  // blob 对象 -- 文件的下载 * 图片的预览
+  // binary large object : 二进制大对象，主要是用来存二进制数据的
+
+  // let str = '123456'
+
+  let strHtml = `	<div>
+						<div><span>Blob</span></div>
+			        </div>`
+
+
+  let blob = new Blob([strHtml], {
+    // type: "text/plant"// 文本类型
+    type: "text/html" //
+  })
+
+
+  // 获取文本类型的数据
+  // blob.text().then((res) => {
+  // 	console.log(res);
+  // })
+
+  skip.onclick = function (eve) {
+    this.setAttribute("download", "blob.html")
+    // URL.createObjectURL()  方法只能实现将blob文件转换成URL
+    this.href = URL.createObjectURL(blob)
+  }
+
+  Input.onchange = function (eve) {
+    let file = eve.target.files[0]; //是一个继承自 blob 的一个二进制对象
+
+    // 点击实现实现文件的下载  但地址必须是同源
+    // 通过 创建URL,然后下载
+    var a = document.createElement('a')
+    a.setAttribute("download", "myBaidu.html")
+    // 这里我们通过file的方式创建本地的URL  所以是一同步的方式出发的事件
+    a.href = URL.createObjectURL(file)
+    a.click()
+  }
+
+  // 实现图片的本地预览
+
+  Input.onchange = function (e) {
+    let file = e.target.files[0]
+      , img = new Image();
+    // 因为这里创建的这个事件本身就是同步的  所以这是以同步的方式出发的事件
+    // img.src = URL.createObjectURL(file)
+    // document.body.appendChild(img)
+
+
+    // 异步  实现图片预览
+    // h5 新增Api: FilrReader  返回一个异步线程
+    let fileReader = new FileReader()
+    // console.log(fileReader);
+    document.body.appendChild(img)
+
+    fileReader.onload = function () {
+      img.src = fileReader.result
+      // 当程序执行完成后将结果放在 result 上面去， 我们通过 .readAsDataURL() 来读取
+    }
+
+    fileReader.readAsDataURL(file)
+  }
+
+
+</script>
+<!--
+<script>
+    let ProgressBar = document.getElementById('progressBar');
+    ProgressBar.onclick = function () {
+        var timer = requestAnimationFrame(function FN() {
+            if (parseInt(progressBar.style.width) < 300) {
+                progressBar.style.width = parseInt(progressBar.style.width) + 3 + 'px';
+                progressBar.innerHTML = parseInt(progressBar.style.width) / 3 + '%';
+                timer = requestAnimationFrame(FN);
+            } else {
+                cancelAnimationFrame(timer);
+            }
+        });
+    }
+
+</script> -->
+<style>
+    .sty {
+        width: 0px;
+        height: 10px;
+        line-height: 10px;
+        background-color: yellow;
+        border: 1px solid red;
+        border-radius: 10px;
+    }
+</style>
+</body>
+
+</html>
