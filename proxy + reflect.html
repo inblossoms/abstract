@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<!-- 
+		proxy: 代理 起到一个拦截的作用
+	 -->
+
+	<script>
+
+
+		let arr = [1, 2, 3, 4, 5, 6, 7]
+
+		function createArray(arr) {
+
+			let payload = {
+				get: function (target, key, receiver) {
+
+					let index = Number(key)
+					if (index < 0) {
+						index += arr.length
+					}
+					return Reflect.get(target, index, receiver)
+					
+				}
+			}
+
+			return new Proxy(arr, payload)
+		}
+
+
+		arr = createArray(arr)
+		console.log(arr[-1]);
+
+
+
+
+
+
+
+		let star = {
+			name: "mayun",
+			age: 60,
+			phoneNumber: "18888888888"
+		}
+
+		// proxy 陷阱： getter在获取返回对象中的数据时，由于操作的依旧是对象 所以会进入proxy陷阱
+		var proxy = new Proxy(star, {
+			get: function (target, key, receiver) {
+				console.log(target, receiver, key);
+				if (key === "phoneNumber") {
+					return "经纪人电话：13333333333"
+				} else {
+					return Reflect.get(target, key, receiver)
+					// 通过 Reflect 解决陷阱问题
+				}
+			}
+		})
+
+		console.log(proxy.name);
+		console.log(proxy.phoneNumber);
+
+	</script>
+
+
+</body>
+
+</html>
