@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<!-- 
+	工厂模式：
+		1. 父类：是一个抽象类不可以直接实例，将子类的公共部分提取出来以降低dia代码耦合
+		2. 子类：实现自身的实例方法，将独立的内容在自身进行实现
+ -->
+	<script>
+
+		// 案例： 实现一个工具代工厂：父类中保留工具通有属性，子类实现自身特有内容
+
+		function Factorys(module) {
+			this.module = module
+			this.sayme = function () {
+				return this.module;
+			}
+		}
+
+		Factorys.prototype = {
+			constructor: Factorys,
+			Methds: function () {
+				let child = this.questions();
+				child.a()
+				child.b()
+				return child;
+			},
+			questions: function () {
+				throw new Error("不可以通过父类直接调用方法！")
+			}
+		}
+
+		// 子类
+		function FactoryChild(prop) {
+			this.module = prop;
+			Factorys.call(this.module)
+		}
+
+		// 继承
+		let inherit = (() => {
+			let F = function () { };
+			return function (target, origin) {
+				F.prototype = origin.prototype;
+				target.protptype = new F();
+				target.prototype.constructor = target;
+				target.prototype.uber = origin.prototype;
+			}
+		}
+		)();
+
+
+		inherit(FactoryChild, Factorys);
+
+		FactoryChild.prototype.Methds = function () {
+			let a = function () {
+				console.log("A: 任务！");
+			}
+			let b = function () {
+				console.log("B: 任务！");
+			}
+
+			return {
+				a, b
+			}
+		}
+
+
+		let par = new FactoryChild("凤凰牌")
+		console.log(par);
+		console.log(par.Methds());
+		let per = new Factorys("雕牌")
+		console.log(per.Methds());
+	</script>
+
+</body>
+
+</html>

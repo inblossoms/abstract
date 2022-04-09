@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>享元模式</title>
+</head>
+
+<body>
+	<!-- 
+	享元模式：flyWeight
+		即：共享数据
+		1. 共享状态放到对象内部
+		2. 创建共享对象
+		3. 内部状态不变
+		4. 外部状态会根据不同的场景变换
+ -->
+
+	<script>
+		// 1. 将 sex 变化少的作为内部属性，进行共享
+		let Modal = function (sex) {
+			this.sex = sex
+		}
+
+		Modal.prototype.takePhoto = function () {
+			console.log("sex :" + this.sex + " --- " + "clothes :" + this.clothes);
+		}
+
+		// 通过工厂的方式量产 modal （添加内部状态）
+		let modeFactory = (function () {
+			let modalGender = {} // 存储 Modal实例生成的内部属性
+			return {
+				createModal: function (sex) {
+					if (modalGender[sex]) {
+						return modalGender[sex]
+					}
+					return (modalGender[sex] = new Modal(sex))
+				}
+			}
+		})()
+		// 状态管理器（添加外部装态）
+		let ModalManager = (function () {
+			const modalObj = {}
+			return {
+				// 添加内部装态
+				add: function (sex, i) {
+					modalObj[i] = {
+						clothes: "衣服：" + i
+					}
+					return modeFactory.createModal(sex)
+				},
+				// 设置外部装态
+				setExternalState: function (modal, i) {
+					modal.clothes = modalObj[i].clothes
+				}
+			}
+		})()
+
+
+		for (let i = 0; i < 3; i++) {
+			let maleModal = ModalManager.add("male", i)
+			ModalManager.setExternalState(maleModal, i)
+			maleModal.takePhoto()
+		}
+
+
+
+		for (let i = 0; i < 2; i++) {
+			let maleModal = ModalManager.add("female", i)
+			ModalManager.setExternalState(maleModal, i)
+			maleModal.takePhoto()
+		}
+
+
+	</script>
+
+	<!-- <script>
+		// 共 5 套衣服， 需要模特展示
+
+
+		let Modal = function (sex, clothes) {
+			this.sex = sex;
+			this.clothes = clothes;
+		}
+
+		Modal.prototype.takePhoto = function () {
+			console.log("sex :" + this.sex + " --- " + "clothes :" + this.clothes);
+		}
+
+		for (let i = 0; i < 3; i++) {
+			let modal = new Modal("male", "clothes" + i)
+			modal.takePhoto()
+		}
+
+		for (let i = 0; i < 2; i++) {
+			let modal = new Modal("female", "clothes" + i)
+			modal.takePhoto()
+		}
+
+
+	</script> -->
+
+</body>
+
+</html>

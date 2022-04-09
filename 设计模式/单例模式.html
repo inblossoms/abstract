@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>单例模式</title>
+</head>
+
+<body>
+	<!-- 
+		单例模式：只是是我实例化一次，每次返回的实例都是同一对象
+			实现思路：通过在构造函数本身绑定静态方法，然后将函数返回
+	 -->
+
+	<button id="btn" >Login</button>
+
+
+	<script>
+		// 单例模式 引用场景 (手动执行所以不使用立即执行的方式)
+		let getInstance = function (fn) {
+			let reslove;
+			return function () {
+				return reslove || (reslove = fn.call(this, arguments))
+			}
+		}
+
+		let createLogin = function () {
+			let div = document.createElement("div")
+			div.style.width = "300px"
+			div.style.height = "200px"
+			// div.sty.border = "solid 1px balck"
+			div.innerHTML = "Login"
+			div.style.display = "none"
+			document.body.appendChild(div)
+			return div;
+		}
+
+		let singeltonLogin = getInstance(createLogin)
+		btn.onclick = function () {
+			let elBox = singeltonLogin()
+			elBox.style.display = "block"
+		}
+
+	</script>
+
+	<script>
+
+		function Singleton(name) {
+			this.name = name;
+		}
+
+		Singleton.prototype.sayName = function () {
+			return this.name;
+		}
+
+		Singleton.getInstance = (function () {
+			let instance;
+			return function (name) {
+				if (!instance) instance = new Singleton(name);
+				return instance;
+			}
+		})();
+
+		let a = Singleton.getInstance("zhangsan")
+		let b = Singleton.getInstance("lisi")
+		console.log(a);
+		console.log(b);
+		console.log(a === b);
+
+		let c = new Singleton("zhangsansan")
+		let d = new Singleton("lisisi")
+		console.log(c);
+		console.log(d);
+		console.log(c === d);
+	</script>
+
+
+</body>
+
+</html>

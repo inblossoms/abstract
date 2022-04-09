@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>发布订阅和策略模式</title>
+</head>
+
+<body>
+	<!-- 
+		综合案例：
+			表单验证，返回不符合验证规则的内容；对输入内容依旧不和要求依旧进行提醒
+ -->
+
+	<form action="http://www.baidu.com" id="registerForm" method="get">
+		<p>用户名：<input type="text" name="userName" id="submit"></p>
+		<p>密码：<input type="text" name="password" id="submit"></p>
+		<p>手机号：<input type="text" name="phoneNumber" id="submit"></p>
+		<br>
+		<button type="submit">提交</button>
+	</form>
+
+
+	<script>
+
+		class myEvent {
+			constructor() {
+				this.clientList = [];
+			}
+
+			listen(key, fn) {
+				if (!this.clientList[key]) {
+					this.clientList[key] = []
+				}
+				this.clientList[key].push(fn)
+			}
+
+			trigger() {
+				let key = [].shift.call(arguments)
+					, fns = this.clientList[key],
+					res = [];
+				for (let i = 0; i < fns.length; i++) {
+					const element = fns[i];
+					res.push(element.apply(this, arguments))
+				}
+
+				return res
+			}
+		}
+
+		let strateges = {
+			isNotEmpty: function (val, errMsg) {
+				if (val === "") return errMsg;
+				return val;
+			},
+
+			mixLength: function (val, len, errMsg) {
+				if (val.length < len) {
+					return val
+				}
+				return val
+			},
+
+			mobileFormat: function (val, errMsg) {
+				if (!/(^1[3|5|8][0-9]{9}$)/.test(val)) {
+					return errMsg
+				}
+
+				return val
+			}
+		}
+
+		class Validator extends myEvent {
+			add(dom, rules) {
+				rules.forEach(rule => {
+					let strategyArr = rule.strategy.split(":"),
+						errMsg = rule.errMsg,
+						strategy = strategyArr.shift();
+
+					this.listen(strategy, function () {
+						strategyArr.unshift(dom.value)
+						strategyArr.push(errMsg)
+
+						return strateges[strategy].apply(dom, strategyArr)
+					})
+				})
+			}
+
+			start() {
+				return Object.keys(strateges).reduce((prev, cur) => {
+					prev.push(this.trigger(cur))
+					return prev
+				}, []).flat();
+			}
+		}
+
+		let registerForm = document.getElementById("registerForm")
+
+		function ValidatorFunc() {
+			let validator = new Validator()
+
+			validator.add(registerForm.userName, [
+				{ strategy: "isNotEmpty", errMsg: "用户名不能为空！" },
+				{ strategy: "minLength: 6", errMsg: "用户名长度不能小于 6 位！" }
+			]);
+
+			validator.add(registerForm.passWord, [
+				{ strategy: "minLength: 6", errMsg: "密码长度不能小于 6 位！" }
+			]);
+
+			validator.add(registerForm.phoneNumber, [
+				{ strategy: "mobileFormat", errMsg: "手机号格式错误！" }
+			]);
+
+			return validator.start()
+		}
+
+		registerForm.onsubmit = function (ev) {
+			let e = ev || window.event;
+
+			e.preventDefault();
+			let res = ValidatorFunc();
+
+			console.log(res);
+		}
+
+	</script>
+
+</body>
+
+</html>

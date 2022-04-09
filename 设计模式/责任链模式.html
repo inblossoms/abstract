@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>责任链模式</title>
+</head>
+
+<body>
+	<!-- 
+		责任链模式：
+			有点：可以将大规模的if判断 进行优化，转换成链式的方式，符合代码规范的功能独立、纯函数、局限的副作用
+			缺点：当内容包含性过与复杂的情况下，程序会变的异常复杂，有些像原型链
+ -->
+
+
+	<script>
+		// orderType = 5 : 用户充值500
+		function order500(orderType, isPay, count) {
+			let res = orderType === 5 && isPay === true ? (console.log("恭喜获得80元优惠券！")) : "nextSuccessor"
+			return res;
+		}
+
+		function order200(orderType, isPay, count) {
+			let res = orderType === 2 && isPay === true ? (console.log("恭喜获得30元优惠券！")) : "nextSuccessor"
+			return res;
+		}
+
+		function orderNormal(count) {
+			let res = count === 0 ? (console.log("恭喜获得10元优惠券！")) : (console.log("很遗憾没有优惠券了！"))
+			return res;
+		}
+
+		let Chain = function (fn) {
+			this.fn = fn;
+			this.successor = null;
+		}
+
+		Chain.prototype.setNextSuccessor = function (successor) {
+			return (this.successor = successor);
+		}
+
+		Chain.prototype.passRequest = function () {
+			let res = this.fn.apply(this, arguments)
+			if (res === "nextSuccessor") {
+				return this.successor && this.successor.passRequest.apply(this.successor, arguments)
+			}
+			return res;
+		}
+
+		let chainOrder500 = new Chain(order500)
+			, chainOrder200 = new Chain(order200)
+			, chainOrderNormal = new Chain(orderNormal);
+
+		chainOrder500.setNextSuccessor(chainOrder200)
+		chainOrder200.setNextSuccessor(chainOrderNormal)
+
+		chainOrder500.passRequest(5, true, 10)
+		chainOrder500.passRequest(2, true, 10)
+		chainOrder500.passRequest(0, true, 10)
+		chainOrder500.passRequest(5, false, 10)
+		chainOrder500.passRequest(5, false, 0)
+
+		// console.log(chainOrder500, chainOrder200, chainOrderNormal);
+	</script>
+</body>
+
+</html>

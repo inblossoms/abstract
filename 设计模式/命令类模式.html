@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+
+	<button id="btn1">刷新当前页面</button>
+	<button id="btn2">新建子菜单</button>
+	<button id="btn3">删除子菜单</button>
+
+	<!-- 
+		通过命令类的方式设置请求者和被请求者之间的关系：命令类
+		为什么要使用命令模式：
+			命令模式可以将命令单独抽离出来，通过单独的命令类生成一个命令对象
+			通过统一的状态（ receiver ） ，在特定需求下将统一的状态存储起来
+	 -->
+	<script>
+		let setCommand = function (button, command) {
+			button.onclick = function () {
+				command.execute()
+			}
+		}
+
+		let Menubar = {
+			refresh: function () {
+				console.log("刷新当前页面内容！")
+			}
+		}
+
+		let SubMenu = {
+			add: function () {
+				console.log("新建子菜单选项！")
+			},
+			del: function () {
+				console.log("删除子菜单选项！")
+			}
+		}
+
+		function RefreshMenuBarCommand(receiver) {
+			return {
+				execute: () => receiver.refresh()
+			}
+		}
+
+		function AddSubMenuCommand(receiver) {
+			return {
+				execute: () => receiver.add()
+			}
+		}
+
+		function DelSubMenuCommand(receiver) {
+			return {
+				execute: () => receiver.del()
+			}
+		}
+
+		let refreshMenuBarCommand = RefreshMenuBarCommand(Menubar)
+		let addSubMenuCommand = AddSubMenuCommand(SubMenu)
+		let delSubMenuCommand = DelSubMenuCommand(SubMenu)
+		setCommand(btn1, refreshMenuBarCommand)
+		setCommand(btn2, addSubMenuCommand)
+		setCommand(btn3, delSubMenuCommand)
+	</script>
+
+
+
+</body>
+
+</html>

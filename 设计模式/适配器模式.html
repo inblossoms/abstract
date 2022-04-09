@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>适配器模式</title>
+</head>
+
+<body>
+	<!-- 
+		适配器模式：
+			在需求确定的情况下，不改变原始需求的情况下满足用户的某些类型需求
+ -->
+	<script>
+
+		let getBeiJingDistrict = function () {
+			let beiJingDistrict = [
+				{ name: "CaoYang", id: 0012 },
+				{ name: "CangPing", id: 0014 },
+				{ name: "HaiDian", id: 0122 },
+			];
+
+			return beiJingDistrict;
+		}
+
+
+		let render = function (fn) {
+			console.log("北京市区");
+			console.log(JSON.stringify(fn, null, 2));
+		}
+
+
+		let adapter = function (fn) {
+			let address = {},
+				primitiveValue = fn();
+			primitiveValue.forEach(item => address[item.name] = item.id)
+			return address
+		}
+
+		render(adapter(getBeiJingDistrict))
+
+
+	</script>
+
+</body>
+
+</html>

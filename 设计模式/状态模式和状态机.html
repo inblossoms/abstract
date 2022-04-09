@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>状态模式和状态机</title>
+</head>
+
+<body>
+
+	<button id="btn">开关</button>
+
+	<!-- 
+	状态模式：
+		
+ -->
+
+	<script>
+		{
+			// 	class OffState {
+			// 		constructor(proto) {
+			// 			this.origin = proto; // 类与类之间是依赖关系 不是继承，所以在存储this指向
+			// 		}
+			// 		buttonWasPressed() {
+			// 			console.log("--弱光--")
+			// 			this.origin.setState(this.origin.weakState)
+			// 		}
+			// 	}
+
+			// 	class WeakState {
+			// 		constructor(proto) {
+			// 			this.origin = proto; // 类与类之间是依赖关系 不是继承，所以在存储this指向
+			// 		}
+			// 		buttonWasPressed() {
+			// 			console.log("--强光--")
+			// 			this.origin.setState(this.origin.strongState)
+			// 		}
+			// 	}
+
+			// 	class StrongState {
+			// 		constructor(proto) {
+			// 			this.origin = proto; // 类与类之间是依赖关系 不是继承，所以在存储this指向
+			// 		}
+			// 		buttonWasPressed() {
+			// 			console.log("--关灯--")
+			// 			this.origin.setState(this.origin.offState)
+			// 		}
+			// 	}
+
+		}
+
+
+		let FSM = {
+			offState: {
+				buttonWasPressed() {
+					console.log("--弱光--")
+					this.setState(this.weakState)
+				}
+			},
+			weakState: {
+				buttonWasPressed() {
+					console.log("--强光--")
+					this.setState(this.strongState)
+				}
+			},
+			strongState: {
+				buttonWasPressed() {
+					console.log("--关灯--")
+					this.setState(this.offState)
+				}
+			},
+		}
+
+
+
+		function NewLight() {
+			this.offState = FSM.offState
+			this.weakState = FSM.weakState
+			this.strongState = FSM.strongState
+
+			// this.offState = new OffState(this)
+			// this.weakState = new WeakState(this)
+			// this.strongState = new StrongState(this)
+
+			this.currentState = this.offState;
+			this.button = btn;
+		}
+
+		NewLight.prototype.init = function () {
+			this.button.onclick = () => {
+				// this.currentState.buttonWasPressed()
+				this.currentState.buttonWasPressed.call(this)
+			}
+		}
+
+		NewLight.prototype.setState = function (newState) {
+			this.currentState = newState;
+		}
+
+		let newlight = new NewLight()
+		newlight.init()
+	</script>
+
+
+
+	<!-- <script>
+		// 这种写法存在问题
+		/*
+		*			1.违背了函数的开放封闭原则
+					2. 胖函数（随着条件的增加 代码不易阅读性提高）】、
+					3. 关系不明确
+		*/
+
+		let Light = function () {
+			this.state = "off"
+			this.button = btn;
+		}
+
+		Light.prototype.init = function () {
+			this.button.onclick = () => {
+				this.buttonWasPressed()
+			}
+		}
+
+		Light.prototype.buttonWasPressed = function () {
+			if (this.state === "off") {
+				this.state = "open"
+				console.log("灯被打开了！");
+			} else if (this.state === "open") {
+				this.state = "off"
+				console.log("灯被关闭了！");
+			}
+		}
+		let light = new Light()
+		light.init();
+	</script> -->
+
+</body>
+
+</html>

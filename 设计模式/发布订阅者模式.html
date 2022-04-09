@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+	<!-- 
+	发布订阅者模式：
+		1. 明确主题 （例： 售楼处）
+		2. 缓存列表 （存储每一个监听器所对应的监听函数）
+		3. 当事件被触发（状态发生变化时），依次执行回调函数
+ -->
+
+	<script>
+		// 封装成类的方式
+		let salesOffices = {}
+
+		class Event {
+			constructor() {
+				this.clientList = [];
+			}
+
+			listen(key, fn) {
+				if (!this.clientList[key]) {
+					this.clientList[key] = []
+				}
+				this.clientList[key].push(fn)
+			}
+
+			trigger() {
+				let key = [].shift.call(arguments)
+					, fns = this.clientList[key],
+					res = [];
+				for (let i = 0; i < fns.length; i++) {
+					const element = fns[i];
+					res.push(element.apply(this, arguments))
+				}
+
+				return res
+			}
+		}
+
+		class SalesOffices extends Event {
+			constructor() {
+				super();
+			}
+		}
+
+
+		salesOffices = new SalesOffices();
+
+		salesOffices.listen("squary96", payload)
+		function payload(price, squareMeter) {
+			console.log(`面积：${price}，平米价格：${squareMeter}`);
+		}
+		salesOffices.listen("squary108", payload)
+		function payload(price, squareMeter) {
+			console.log(`面积：${price}，平米价格：${squareMeter}`);
+		}
+
+		salesOffices.trigger("squary108", 5000, 108)
+		// salesOffices.trigger("squary96", 5000, 96)
+	</script>
+
+	<script>
+		// 1. 设置发布者 售楼部
+		let salesOffices = {}
+		// 2. 缓存列表 对每一个监听事件做一个缓存
+		salesOffices.clientList = [] // 以键值对的方式进行储存（[square: [fn]]）
+		console.log(salesOffices.clientList);
+		salesOffices.listen = function (key, fn) {
+			if (!this.clientList[key]) { this.clientList[key] = [] };
+			this.clientList[key].push(fn);
+		}
+
+		salesOffices.trigger = function () {
+			let key = [].shift.call(arguments)
+				, fns = this.clientList[key];
+			// console.log(fns);
+			for (let i = 0; i < fns.length; i++) {
+				const element = fns[i];
+				element.apply(this, arguments)
+			}
+
+		}
+
+		salesOffices.listen = ("squary96",
+			function (price, squareMeter) {
+				console.log(`面积：${price}，平米价格：${squareMeter}`);
+			})
+
+
+		salesOffices.listen = ("squary106", payload)
+
+		function payload(price, squareMeter) {
+			console.log(`面积：${price}，平米价格：${squareMeter}`);
+		}
+
+		salesOffices.trigger("squary96", 5000, 108)
+	</script>
+</body>
+
+</html>

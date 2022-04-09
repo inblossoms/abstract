@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>策略模式</title>
+</head>
+
+<body>
+	<!-- 
+		策略模式：面向对象的方式
+			会梳理成两个类：梳理控制当前流程的流程类和实现对应功能的策略类
+	 -->
+
+	<script>
+		//  将策略类提取
+
+		let strateges = {
+			S: function (salary) { return salary * 4 },
+			A: function (salary) { return salary * 2 },
+			B: function (salary) { return salary * 1 }
+		}
+
+		let calcueateBouns = function (performanceLevel, salary) {
+			return strateges[performanceLevel](salary)
+		}
+
+
+		console.log(calcueateBouns("S", 20000));
+
+
+	</script>
+
+	<script>
+
+		// 案例实现： 奖金发放
+		// 策略类：类的详细规则,在需要的情况下添加对应的类就行   流程类：实现最终统一流程的流程类，相对保持不变
+
+		let performance = function () { }
+		// 薪资计算方法
+		performance.prototype.calculate = function (salary) {
+			return salary *= 2
+		}
+
+
+		// 奖金池
+		let Bouns = function () {
+			this.salary = null
+			this.strategy = null
+		}
+		// 设置薪水
+		Bouns.prototype.setSalary = function (salary) {
+			this.salary = salary
+		}
+		// 策略
+		Bouns.prototype.setStrategy = function (strategy) {
+			this.strategy = strategy
+		}
+
+		Bouns.prototype.getBouns = function (strategy) {
+			return this.strategy.calculate(this.salary)
+		}
+
+
+		let bouns = new Bouns()
+		bouns.setStrategy(new performance())
+		bouns.setSalary(10000)
+		console.log(bouns.getBouns());
+	</script>
+
+
+
+</body>
+
+</html>
