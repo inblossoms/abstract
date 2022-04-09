@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+
+<body>
+
+	<script>
+
+		function randomString() {
+			return (
+				Math.random()
+					.toString(36).substr(3, 6) + new Date().getTime().toString(36)
+			)
+		}
+
+		Function.prototype.myCall = function (context) {
+
+			let props = randomString()
+			if ((!typeof context === "function") && !typeof context === "object" && !typeof context === null) return;
+			context[props] = this;
+
+			let arr = []
+			for (let i = 1; i < arguments.length; i++) {
+
+				arr.push(arguments[i])
+			}
+
+			let res = eval("context[props](" + arr + ")")
+
+			delete context[props]
+
+			return res
+		}
+
+
+		Function.prototype.myApply = function (context) {
+
+			let props = randomString()
+			if ((!typeof context === "function") && !typeof context === "object" && !typeof context === null) return;
+			context[props] = this;
+
+			let arr = []
+			for (let i = 0; i < arguments[1].length; i++) {
+
+				arr.push(arguments[1][i])
+			}
+
+			let res = eval("context[props](" + arr + ")")
+
+			delete context[props]
+
+			return res
+		}
+
+
+		function fun(a, b) {
+			return b - a
+		}
+
+
+
+		function test(a, b) {
+			let count = a + b;
+			return count;
+		}
+
+
+		test.myApply({}, [1, 2])
+	</script>
+
+
+
+</body>
+
+</html>
