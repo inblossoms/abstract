@@ -41,7 +41,7 @@
 		// 子类
 		function FactoryChild(prop) {
 			this.module = prop;
-			Factorys.call(this.module)
+			Factorys.call(this, this.module)
 		}
 
 		// 继承
@@ -75,8 +75,9 @@
 
 		let par = new FactoryChild("凤凰牌")
 		console.log(par);
-		console.log(par.Methds());
+		console.log(par.Methds().a());
 		let per = new Factorys("雕牌")
+		console.log(per.sayme());
 		console.log(per.Methds());
 	</script>
 
