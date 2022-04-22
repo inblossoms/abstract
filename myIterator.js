@@ -9,7 +9,8 @@ function myIterator(props) {
 				done: done,
 				value: value
 			}
-		}
+		},
+		[Symbol.iterator]: function() { return this }//允许一个迭代器能被各种需要可迭代对象的语法所使用
 	}
 }
 
