@@ -1,15 +1,14 @@
 ### TypeScript
 > 类型断言  一下两中是等效的
-const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement
-
-const myCanvas =<HTMLCanvasElement> document.getElementById("main_canvas")
+- const myCanvas = document.getElementById("main_canvas") as HTMLCanvasElement
+- const myCanvas =<HTMLCanvasElement> document.getElementById("main_canvas")
 
 > 文字类型
 testString : 可以表示任何可能类型的字符串 可以对同一变量重复定义
-eg: let testString = "Hello World";
+- eg: let testString = "Hello World";
 
 constantString : 只能表示一个可能类型的字符串
-eg: const constantString = "Hello World"
+- eg: const constantString = "Hello World"
 
 ```ts
 
@@ -38,7 +37,7 @@ handleRequest(req.url, req.method)
 ```
 
 > 枚举 ： （使用场景）确定数据需要被枚举 否则不需要使用他
-enum Direction {
+- enum Direction {
 	Up = 1,
 	Down,
 	Left,
@@ -47,6 +46,5 @@ enum Direction {
 console.log(Direction.Up) // 1
 
 > 类型缩小： 常用于联合类型变量的场景
-funciton padLeft(padding: number|string, input: string): string{
-	
+- funciton padLeft(padding: number|string, input: string): string{
 }
