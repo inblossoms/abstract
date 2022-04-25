@@ -300,53 +300,67 @@
 // 	}
 // 	return true ? bird : fish;
 
-function greeter(fn: (a: string) => void) {
-	fn("hello world")
-}// 参数fn：限定传进来的函数
+// function greeter(fn: (a: string) => void) {
+// 	fn("hello world")
+// }// 参数fn：限定传进来的函数
 
-function printToConsole(s: string) {
-	console.log(s);
-}
+// function printToConsole(s: string) {
+// 	console.log(s);
+// }
 
-greeter(printToConsole)
-
-
-class Ctor {
-	s: string
-	constructor(s: string) {
-		this.s = s
-	}
-}
-type SomeConstructor = {
-	new(s: string): Ctor
-}
-
-function fn(ctor: SomeConstructor) {
-	return new ctor("hello")
-}
-
-interface CallOrConstructor {
-	new(s: string): Date
-	(n?: number): number
-}
-function fun(date: CallOrConstructor) {
-	let d = new date("2021-12-12")
-	let n = date(2000)
-}
+// greeter(printToConsole)
 
 
-function map<I, O>(arr: I[], fun: (arg: I) => O): O[] {
-	return arr.map(fun)
-}
+// class Ctor {
+// 	s: string
+// 	constructor(s: string) {
+// 		this.s = s
+// 	}
+// }
+// type SomeConstructor = {
+// 	new(s: string): Ctor
+// }
 
-const parsed = map(["1", "2", "3"], n => parseInt(n))
+// function fn(ctor: SomeConstructor) {
+// 	return new ctor("hello")
+// }
 
-function longest<Type extends { length: number }>(a: Type, b: Type) {
-	a.length >= b.length ? a : b
-}
+// interface CallOrConstructor {
+// 	new(s: string): Date
+// 	(n?: number): number
+// }
+// function fun(date: CallOrConstructor) {
+// 	let d = new date("2021-12-12")
+// 	let n = date(2000)
+// }
 
-const longerArr = longest([1, 2, 3], [1, 2, 3, 3])
-const longerStr = longest("asdf", "oiu")
+
+// function map<I, O>(arr: I[], fun: (arg: I) => O): O[] {
+// 	return arr.map(fun)
+// }
+
+// const parsed = map(["1", "2", "3"], n => parseInt(n))
+
+// function longest<Type extends { length: number }>(a: Type, b: Type) {
+// 	a.length >= b.length ? a : b
+// }
+
+// const longerArr = longest([1, 2, 3], [1, 2, 3, 3])
+// const longerStr = longest("asdf", "oiu")
 // const bad = longest(1, 2)
 
 
+type vfun = () => void;
+
+const f: vfun = () => true;
+
+const v = f()
+console.log(v);
+
+
+interface i {
+	[prop: string]: string | number
+}
+
+const n: i = { n: "dd"}
+// const s = n ;a'

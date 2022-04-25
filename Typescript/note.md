@@ -188,3 +188,8 @@ const bad = longest(1, 2)
 > - unknown: 代表任何值，与any有些类似，但更安全。对未知unknown值做任何事情都是不合法的。
 > - never: 表示永远都不会被观察到的值。当程序跑出一个错误时，那么该函数的返回值就是一个never类型。
 > - Function: 全局性的类型的类型描述，定义了Function类型的值总是可以被调用，这些调用返回值的类型为： any
+
+> 属性修改器
+> 1. 可选属性  ?
+> 2. 只读属性  readonly
+> 3. 索引签名  interface idxName { [propsName: string]: string}
