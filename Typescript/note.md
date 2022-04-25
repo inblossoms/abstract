@@ -173,3 +173,12 @@ const bad = longest(1, 2)
 > - 如果一个类型的参数只出现在一个地方，就考虑是否真的需要该类型参数
 > 回调中的可选参数
 > - 当为回调写一个函数类型时，永远不要写一个可选参数，除非你打算在不传递该参数的情况下调用函数。
+
+> 函数重载
+> 在可能的情况下，我们应该总是倾向于使用联合类型的参数而不是重载参数。
+- 重载签名 定义函数调用，并且在实现签名的函数中是不能调用重载签名里面的参数的，但实现时需要兼容
+- function makeDate(timestamp: number): Date; 
+- function makeDate(m: number, d: number, y: number): Date;
+- 实现签名
+- function makeDate(mOrtimestamp: number, d?: number, y?: number): Date{ .... }
+
