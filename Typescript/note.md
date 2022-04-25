@@ -50,3 +50,97 @@ console.log(Direction.Up) // 1
 funciton padLeft(padding: number|string, input: string): string{
 	
 }
+
+> 使用类型谓词: pet is Fish -- parameterName is Type 通过函数的返回值判断是否为指定的类型谓词
+- function isFish(pet: Fish | Bird): pet is Fish{
+-  return (pet as Fish).swim !== undefined;
+- }
+```ts
+type Fish = {
+	name: string,
+	swim: () => void
+}
+
+type Bird = {
+	name: string,
+	fly: () => void
+}
+
+function isFish(pet: Fish | Bird): pet is Fish {
+	return (pet as Fish).swim !== undefined
+}
+
+function getSmallPet(): Fish | Bird {
+	let fish: Fish = {
+		name: "sharkey",
+		swim: () => {
+
+		}
+	}
+
+	let bird: Bird = {
+		name: "sparrow",
+		fly: () => {
+
+		}
+	}
+	return true ? bird : fish;
+}
+```
+
+> unions
+- interface Circle {
+	kind: "circle"
+	radius? number;
+}
+- interface Square {
+	kind: "square";
+	sideLength? number
+}
+- type Shape = Circle | Square
+- function getArea(shape: Shape){
+  - switch(shape.kind){
+    - case "circle":
+		-	return Math.PI * shape.radius ** 2 
+
+		- case "square":
+		- return shape.sideLength ** 2
+  - }
+- }
+
+> never 类型与穷尽性检查 -- never ： 不应该存在的状态
+
+> 函数类型表达式
+```ts
+type GreetFun = (a: string) => void
+function greeter(fn: GreetFun) {
+	fn("hello world")
+}// 参数fn：限定传进来的函数
+
+function printToConsole(s: string) {
+	console.log(s);
+}
+
+greeter(printToConsole)
+```
+> 调用签名
+- type DescribableFunction = {
+  - description: string;
+  - (someArg: number): boolean;// 在参数列表和返回类型之间使用：而不是=>
+- }
+
+> 构造签名
+- type SomeConstructor = {
+  - new (s: string): Ctor; // 在参数列表和返回对象或者一个类前加一个new操作符，调用签名就变成了构造签名
+- }
+```ts
+interface CallOrConstructor {
+	new(s: string): Date
+	(n?: number): number
+}
+function fun(date: CallOrConstructor) {
+	let d = new date("2021-12-12")
+	let n = date(2000)
+}
+```
+>

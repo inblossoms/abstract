@@ -241,33 +241,95 @@
 
 // }
 
-function text(name: string, sxe: "male" | "female") {
-	return {
-		a: String
+// function text(name: string, sxe: "male" | "female") {
+// 	return {
+// 		a: String
+// 	}
+
+// }
+// text("zhagnsan", "female")
+
+// function numText(a: string, b: string): -1 | 0 | 1 {
+// 	return a === b ? 0 : a > b ? 1 : -1
+// }
+
+// function handleRequest(url: string, method: "GET" | "POST") {
+
+// }
+// const req = {
+// 	url: "https://baidu.com",
+// 	method: "GET"
+// 	// method: "GET" as "GET"
+// } as const
+
+// handleRequest(req.url, req.method)
+
+
+// type num = Number & {
+
+// }
+
+
+// type Fish = {
+// 	name: string,
+// 	swim: () => void
+// }
+
+// type Bird = {
+// 	name: string,
+// 	fly: () => void
+// }
+
+// function isFish(pet: Fish | Bird): pet is Fish {
+// 	return (pet as Fish).swim !== undefined
+// }
+
+// function getSmallPet(): Fish | Bird {
+// 	let fish: Fish = {
+// 		name: "sharkey",
+// 		swim: () => {
+
+// 		}
+// 	}
+
+// 	let bird: Bird = {
+// 		name: "sparrow",
+// 		fly: () => {
+
+// 		}
+// 	}
+// 	return true ? bird : fish;
+
+function greeter(fn: (a: string) => void) {
+	fn("hello world")
+}// 参数fn：限定传进来的函数
+
+function printToConsole(s: string) {
+	console.log(s);
+}
+
+greeter(printToConsole)
+
+
+class Ctor {
+	s: string
+	constructor(s: string) {
+		this.s = s
 	}
-
 }
-text("zhagnsan", "female")
-
-function numText(a: string, b: string): -1 | 0 | 1 {
-	return a === b ? 0 : a > b ? 1 : -1
+type SomeConstructor = {
+	new(s: string): Ctor
 }
 
-function handleRequest(url: string, method: "GET" | "POST") {
-
-}
-const req = {
-	url: "https://baidu.com",
-	method: "GET"
-	// method: "GET" as "GET"
-} as const
-
-handleRequest(req.url, req.method)
-
-
-type num = Number & {
-
+function fn(ctor: SomeConstructor) {
+	return new ctor("hello")
 }
 
-
-
+interface CallOrConstructor {
+	new(s: string): Date
+	(n?: number): number
+}
+function fun(date: CallOrConstructor) {
+	let d = new date("2021-12-12")
+	let n = date(2000)
+}
