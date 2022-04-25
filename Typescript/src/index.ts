@@ -333,3 +333,20 @@ function fun(date: CallOrConstructor) {
 	let d = new date("2021-12-12")
 	let n = date(2000)
 }
+
+
+function map<I, O>(arr: I[], fun: (arg: I) => O): O[] {
+	return arr.map(fun)
+}
+
+const parsed = map(["1", "2", "3"], n => parseInt(n))
+
+function longest<Type extends { length: number }>(a: Type, b: Type) {
+	a.length >= b.length ? a : b
+}
+
+const longerArr = longest([1, 2, 3], [1, 2, 3, 3])
+const longerStr = longest("asdf", "oiu")
+// const bad = longest(1, 2)
+
+

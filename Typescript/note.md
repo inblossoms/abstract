@@ -141,4 +141,35 @@ function fun(date: CallOrConstructor) {
 	let n = date(2000)
 }
 ```
->
+
+> 泛型函数 两个值之间的对应关系,使输入和输出的值保持一致。
+- function firstElement<Type>(arr: Type[]): Type | undefined {
+	return arr[0]
+}
+```ts
+function map<I, O>(arr: I[], fun: (arg: I) => O): O[] {
+	return arr.map(fun)
+}
+
+const parsed = map(["1", "2", "3"], n => parseInt(n))
+```
+
+> 泛型函数- 限制条件
+```ts
+function longest<Type extends { length: number }>(a: Type, b: Type) {
+	a.length >= b.length ? a : b
+}
+
+const longerArr = longest([1, 2, 3], [1, 2, 3, 3])
+const longerStr = longest("asdf", "oiu")
+const bad = longest(1, 2)
+```
+> 泛型函数- 指定类型参数
+- const arr = Fun<string | number>([1,2,3], ["sads"]);
+
+> 通用函数准则
+> - 可能的情况下，使用类型参数本身，而不是对其进行约束
+> - 尽可能少的使用类型参数
+> - 如果一个类型的参数只出现在一个地方，就考虑是否真的需要该类型参数
+> 回调中的可选参数
+> - 当为回调写一个函数类型时，永远不要写一个可选参数，除非你打算在不传递该参数的情况下调用函数。
