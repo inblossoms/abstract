@@ -514,20 +514,55 @@
 // const x: e = "adsf"
 // const y: a = 123 // 不能将类型“number”分配给类型“never”
 
-type GetReturnType<T> = T extends (...args: never) => infer Return
-	? Return
-	: never
+// type GetReturnType<T> = T extends (...args: never) => infer Return
+// 	? Return
+// 	: never
 
-type Num = GetReturnType<() => number>
-const num: Num = 1
+// type Num = GetReturnType<() => number>
+// const num: Num = 1
 
-function strOrNum(x: string): string
-function strOrNum(x: number): number
-function strOrNum(x: string | number): string | number
-function strOrNum(x: string | number): string | number {
-	return Math.random() > 0.5 ? "string" : 1
-}
+// function strOrNum(x: string): string
+// function strOrNum(x: number): number
+// function strOrNum(x: string | number): string | number
+// function strOrNum(x: string | number): string | number {
+// 	return Math.random() > 0.5 ? "string" : 1
+// }
 
-// infer Return :  对于函数声明只会对解析最后一个重载签名
-type T = GetReturnType<typeof strOrNum>
+// // infer Return :  对于函数声明只会对解析最后一个重载签名
+// type T = GetReturnType<typeof strOrNum>
 // const t: T = true
+
+
+// class P<T>{
+// 	readonly name: string = "zhangsan";
+
+// 	constructor(name?: string) {
+// 		if (name !== undefined) {
+// 			this.name = name
+// 		}
+// 	}
+// }
+
+
+// let p = new P<number>("lisi")
+// console.log(p.name);
+
+// let p2 = new P<string>()
+// console.log(p2.name);
+
+
+class P<T>{
+	x
+	y
+	constructor(prop: { x?: number; y?: number } = {}) {
+		this.x = prop.x
+		this.y = prop.y
+	}
+
+	count(x: number, y: number): number {
+		let c = x + y
+		return c
+	}
+}
+let p = new P()
+console.log(p.count(1, 2))
