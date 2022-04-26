@@ -440,3 +440,22 @@ function createInstance<T extends Animal>(c: new () => T): T {
 createInstance(Lion).keeper.nameTag
 createInstance(Bee).keeper.hasMask
 createInstance(Bee).numlegs
+
+type Arrayish = {
+	[n: string]: unknown
+}
+type n = keyof Arrayish;
+const a: n = "s";
+const b: n = 1;
+// const c: n = true;
+
+type obj = { a: string, b: string, c: string }
+type N = keyof obj;
+const q: N = "a"
+const w: N = "c"
+
+
+
+type P = (s: string) => string
+
+type x = ReturnType<P>

@@ -347,3 +347,7 @@ function createInstance(c) {
 createInstance(Lion).keeper.nameTag;
 createInstance(Bee).keeper.hasMask;
 createInstance(Bee).numlegs;
+const a = "s";
+const b = 1;
+const q = "a";
+const w = "c";

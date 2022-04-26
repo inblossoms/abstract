@@ -280,10 +280,36 @@ const bad = longest(1, 2)
 		createInstance(Bee).keeper.hasMask
 		createInstance(Bee).numlegs
 	```
-- keyof类型操作符
-  1. 
-- typeof类型操作符
-- 索引访问类型
-- 条件类型
-- 映射类型
-- 模板字面量类型
+> keyof类型操作符: 以对象的key作为提供类型
+  ```ts
+	type Point = {x: number; y: number}
+	type P = keyof Point
+
+	const a: P = "x"
+	const b: P = "y"
+
+	eg:
+	type Arrayish = {
+		[n: string]: unknown
+	}
+	type n = keyof Arrayish
+	const a: n = "s"
+	const b: n = 1
+	const c: n = true //当索引参数定义为string时：可以是string与number的联合类型
+	```
+
+> typeof类型操作符: 将已有的目标对象(或 函数的返回值)类型映射给新创建的对象
+> typeof  只能是修饰一个变量或者是某个对象里面的属性
+> ReturnType<T>: 预定义类型,会有一个泛型：泛型内必须传入一个函数类型
+	```ts
+    let s = "hello"
+		let n: typeof s;
+
+		type Predicate = (x: unknown) => boolean
+		type K = ReturnType<Predicate>
+
+	```
+> 索引访问类型
+> 条件类型
+> 映射类型
+> 模板字面量类型
