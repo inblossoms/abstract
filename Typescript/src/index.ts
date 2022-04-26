@@ -459,3 +459,27 @@ const w: N = "c"
 type P = (s: string) => string
 
 type x = ReturnType<P>
+
+type OBJ = {
+	name: string,
+	age: number,
+	sex: string
+}
+
+type Obj = OBJ[keyof OBJ]
+const z: Obj = 1;
+const x: Obj = "s"
+
+
+
+const arr = [
+	{ name: "zhangsan", age: 22 }
+	, { name: "lisi", age: 24 }
+]
+
+
+type T = typeof arr[number] // 通过number获取对应索引的类型
+const o: T = {
+	name: "wangwu",
+	age: 11
+}

@@ -351,3 +351,13 @@ const a = "s";
 const b = 1;
 const q = "a";
 const w = "c";
+const z = 1;
+const x = "s";
+const arr = [
+    { name: "zhangsan", age: 22 },
+    { name: "lisi", age: 24 }
+];
+const o = {
+    name: "wangwu",
+    age: 11
+};

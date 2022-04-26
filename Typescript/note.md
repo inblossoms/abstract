@@ -280,8 +280,9 @@ const bad = longest(1, 2)
 		createInstance(Bee).keeper.hasMask
 		createInstance(Bee).numlegs
 	```
+	
 > keyof类型操作符: 以对象的key作为提供类型
-  ```ts
+```ts
 	type Point = {x: number; y: number}
 	type P = keyof Point
 
@@ -296,20 +297,48 @@ const bad = longest(1, 2)
 	const a: n = "s"
 	const b: n = 1
 	const c: n = true //当索引参数定义为string时：可以是string与number的联合类型
-	```
+```
 
 > typeof类型操作符: 将已有的目标对象(或 函数的返回值)类型映射给新创建的对象
-> typeof  只能是修饰一个变量或者是某个对象里面的属性
+> typeof  只能是修饰一个变量或者是某个对象里面的属
 > ReturnType<T>: 预定义类型,会有一个泛型：泛型内必须传入一个函数类型
-	```ts
+```ts
     let s = "hello"
 		let n: typeof s;
 
 		type Predicate = (x: unknown) => boolean
 		type K = ReturnType<Predicate>
 
-	```
+```
+
 > 索引访问类型
+```ts
+type OBJ = {
+	name: string,
+	age: number,
+	sex: string
+}
+
+type Obj = OBJ[keyof OBJ]
+//  type Obj = OBJ[name  | age]
+// 	type T = "name" | "age" type Obj = OBJ[T]
+const z: Obj = 1;
+const x: Obj = "s"
+
+const arr = [
+	{ name: "zhangsan", age: 22 }
+	, { name: "lisi", age: 24 }
+]
+
+type T = typeof arr[number] // 通过number获取对应索引的类型
+const o: T = {
+	name: "wangwu",
+	age: 11
+}
+```
 > 条件类型
+```ts
+
+```
 > 映射类型
 > 模板字面量类型
