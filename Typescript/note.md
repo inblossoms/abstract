@@ -299,9 +299,9 @@ const bad = longest(1, 2)
 	const c: n = true //当索引参数定义为string时：可以是string与number的联合类型
 ```
 
-> typeof类型操作符: 将已有的目标对象(或 函数的返回值)类型映射给新创建的对象
+> - typeof类型操作符: 将已有的目标对象(或 函数的返回值)类型映射给新创建的对象
 > typeof  只能是修饰一个变量或者是某个对象里面的属
-> ReturnType<T>: 预定义类型,会有一个泛型：泛型内必须传入一个函数类型
+> - ReturnType<T>: 预定义类型,会有一个泛型：泛型内必须传入一个函数类型
 ```ts
     let s = "hello"
 		let n: typeof s;
@@ -330,15 +330,75 @@ const arr = [
 	, { name: "lisi", age: 24 }
 ]
 
-type T = typeof arr[number] // 通过number获取对应索引的类型
+type T = typeof arr[number] // 通过number获取对应索引的数组元素类型
 const o: T = {
 	name: "wangwu",
 	age: 11
 }
 ```
-> 条件类型
-```ts
 
+> 条件类型: SomeType extends OtherType ? TrueType : FalseType
+```ts
+interface A {
+	a: string
+}
+interface B {
+	b: number
+}
+
+type Tp<T extends number | string> = T extends number ? B : A
+
+function selectFn<T extends number | string>(prop: T): Tp<T> {
+	throw ""
+}
+
+let n = selectFn(Math.random() > 0.5 ? "string" : 1234)
+```
+> 条件类型约束 type MessageOf<T> = T extends { message: unknown } ? T ["message"] : never;
+```ts
+type Message<T> = T extends { message: unknown } ? T["message"] : never
+
+interface Email {
+	message: string
+}
+interface Animal {
+	name: string
+}
+
+type e = Message<Email>
+type a = Message<Animal>
+const x: e = "adsf"
+const y: a = 123 // 不能
+```
+> infer: 在条件类型内推理 根据返回值的类型进行推理
+> - type Flatten<Type> = Type extends Array<infer Item> ? Item : Type;
+```ts
+type GetReturnType<T> = T extends (...args: never) => infer Return
+	? Return
+	: never
+
+type Num = GetReturnType<() => number>
+const num: Num = 1
+
+function strOrNum(x: string): string
+function strOrNum(x: number): number
+function strOrNum(x: string | number): string | number
+function strOrNum(x: string | number): string | number {
+	return Math.random() > 0.5 ? "string" : 1
+}
+
+// infer Return :  对于函数声明只会对解析最后一个重载签名
+type T = GetReturnType<typeof strOrNum>
+const t: T = true
+```
+> 分布式条件类型: 当条件类型作用于通用类型，我们给定他一个联合类型时。
+```ts
+type ToArray<Type> = Type extends any ? Type[] : never;
+type StrOrNumArr = ToArray<string | number>;
+// Type StrOrNumArr = string[] | number[]
+type ToArray<Type> = [Type] extends [any] ? Type[] : never;
+type StrOrNumArr = ToArray<string | number>;
+// Type StrOrNumArr = (string | number)[]
 ```
 > 映射类型
 > 模板字面量类型

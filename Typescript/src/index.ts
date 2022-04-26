@@ -413,73 +413,121 @@
 // getProp(obj, "age")
 // getProp(obj, "name")
 
-class BeeKeeper {
-	hasMask: boolean = true
+// class BeeKeeper {
+// 	hasMask: boolean = true
+// }
+
+// class ZooKeeper {
+// 	nameTag: string = "zhan"
+// }
+
+// class Animal {
+// 	numlegs: number = 4
+// }
+
+// class Bee extends Animal {
+// 	keeper: BeeKeeper = new BeeKeeper()
+// }
+
+// class Lion extends Animal {
+// 	keeper: ZooKeeper = new ZooKeeper()
+// }
+
+// function createInstance<T extends Animal>(c: new () => T): T {
+// 	return new c()
+// }
+
+// createInstance(Lion).keeper.nameTag
+// createInstance(Bee).keeper.hasMask
+// createInstance(Bee).numlegs
+
+// type Arrayish = {
+// 	[n: string]: unknown
+// }
+// type n = keyof Arrayish;
+// const a: n = "s";
+// const b: n = 1;
+// // const c: n = true;
+
+// type obj = { a: string, b: string, c: string }
+// type N = keyof obj;
+// const q: N = "a"
+// const w: N = "c"
+
+
+
+// type P = (s: string) => string
+
+// type x = ReturnType<P>
+
+// type OBJ = {
+// 	name: string,
+// 	age: number,
+// 	sex: string
+// }
+
+// type Obj = OBJ[keyof OBJ]
+// const z: Obj = 1;
+// const x: Obj = "s"
+
+
+
+// const arr = [
+// 	{ name: "zhangsan", age: 22 }
+// 	, { name: "lisi", age: 24 }
+// ]
+
+
+// type T = typeof arr[number] // 通过number获取对应索引的类型
+// const o: T = {
+// 	name: "wangwu",
+// 	age: 11
+// }
+
+
+// interface A {
+// 	a: string
+// }
+// interface B {
+// 	b: number
+// }
+
+// type Tp<T extends number | string> = T extends number ? B : A
+
+// function selectFn<T extends number | string>(prop: T): Tp<T> {
+// 	throw ""
+// }
+
+// let n = selectFn(Math.random() > 0.5 ? "string" : 1234)
+
+// type Message<T> = T extends { message: unknown } ? T["message"] : never
+
+// interface Email {
+// 	message: string
+// }
+// interface Animal {
+// 	name: string
+// }
+
+// type e = Message<Email>
+// type a = Message<Animal>
+// const x: e = "adsf"
+// const y: a = 123 // 不能将类型“number”分配给类型“never”
+
+type GetReturnType<T> = T extends (...args: never) => infer Return
+	? Return
+	: never
+
+type Num = GetReturnType<() => number>
+const num: Num = 1
+
+function strOrNum(x: string): string
+function strOrNum(x: number): number
+function strOrNum(x: string | number): string | number
+function strOrNum(x: string | number): string | number {
+	return Math.random() > 0.5 ? "string" : 1
 }
 
-class ZooKeeper {
-	nameTag: string = "zhan"
-}
-
-class Animal {
-	numlegs: number = 4
-}
-
-class Bee extends Animal {
-	keeper: BeeKeeper = new BeeKeeper()
-}
-
-class Lion extends Animal {
-	keeper: ZooKeeper = new ZooKeeper()
-}
-
-function createInstance<T extends Animal>(c: new () => T): T {
-	return new c()
-}
-
-createInstance(Lion).keeper.nameTag
-createInstance(Bee).keeper.hasMask
-createInstance(Bee).numlegs
-
-type Arrayish = {
-	[n: string]: unknown
-}
-type n = keyof Arrayish;
-const a: n = "s";
-const b: n = 1;
-// const c: n = true;
-
-type obj = { a: string, b: string, c: string }
-type N = keyof obj;
-const q: N = "a"
-const w: N = "c"
-
-
-
-type P = (s: string) => string
-
-type x = ReturnType<P>
-
-type OBJ = {
-	name: string,
-	age: number,
-	sex: string
-}
-
-type Obj = OBJ[keyof OBJ]
-const z: Obj = 1;
-const x: Obj = "s"
-
-
-
-const arr = [
-	{ name: "zhangsan", age: 22 }
-	, { name: "lisi", age: 24 }
-]
-
-
-type T = typeof arr[number] // 通过number获取对应索引的类型
-const o: T = {
-	name: "wangwu",
-	age: 11
-}
+// infer Return :  对于函数声明只会对解析最后一个重载签名
+type T = GetReturnType<typeof strOrNum>
+// const t: T = true
