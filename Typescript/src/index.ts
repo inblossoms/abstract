@@ -350,17 +350,93 @@
 // const bad = longest(1, 2)
 
 
-type vfun = () => void;
+// type vfun = () => void;
 
-const f: vfun = () => true;
+// const f: vfun = () => true;
 
-const v = f()
-console.log(v);
+// const v = f()
+// console.log(v);
 
 
-interface i {
-	[prop: string]: string | number
+// interface i {
+// 	[prop: string]: string | number
+// }
+
+// const n: i = { n: "dd"}
+// const s = n ;a'
+// interface a {
+// 	name: string
+// }
+// interface b extends a {
+// 	sex: string
+// }
+
+// const c: b = {
+// 	name: "zhangsan"
+// 	, sex: "male"
+// }
+// function identity<type>(arg: Array<type>): type[] {
+// 	return arg
+// } // 对泛型类型约束
+
+// // const myIdentity = identity
+// // console.log(myIdentity([1, 2]))
+// // 
+
+// interface GenericIdentityFn<Type> {
+// 	(arg: Array<Type>): Type[]
+// }
+// let myIntentity: GenericIdentityFn<string> = identity
+// myIntentity(["aaa"])
+// const b = identity
+// b([1])
+
+// class GenericNumber<NumType>{
+// 	zeroValue: NumType;
+// 	add: (x: NumType, y: NumType) => NumType;
+// }
+
+// const generic = new GenericNumber<string>()
+// generic.zeroValue = "aaaa"
+// generic.add = (a, b) => {
+// 	return a + b
+// }
+// function getProp<T, K extends keyof T>(obj: T, key: K) {
+// 	return obj[key]
+// }
+// let obj = {
+// 	name: "zhangsan",
+// 	sex: "male",
+// 	age: 99
+// }
+
+// getProp(obj, "age")
+// getProp(obj, "name")
+
+class BeeKeeper {
+	hasMask: boolean = true
 }
 
-const n: i = { n: "dd"}
-// const s = n ;a'
+class ZooKeeper {
+	nameTag: string = "zhan"
+}
+
+class Animal {
+	numlegs: number = 4
+}
+
+class Bee extends Animal {
+	keeper: BeeKeeper = new BeeKeeper()
+}
+
+class Lion extends Animal {
+	keeper: ZooKeeper = new ZooKeeper()
+}
+
+function createInstance<T extends Animal>(c: new () => T): T {
+	return new c()
+}
+
+createInstance(Lion).keeper.nameTag
+createInstance(Bee).keeper.hasMask
+createInstance(Bee).numlegs

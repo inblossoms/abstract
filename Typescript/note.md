@@ -190,6 +190,100 @@ const bad = longest(1, 2)
 > - Function: 全局性的类型的类型描述，定义了Function类型的值总是可以被调用，这些调用返回值的类型为： any
 
 > 属性修改器
-> 1. 可选属性  ?
-> 2. 只读属性  readonly
-> 3. 索引签名  interface idxName { [propsName: string]: string}
+1. 可选属性  ?
+2. 只读属性  readonly
+3. 索引签名  interface idxName { [propsName: string]: string}
+
+> 类型补充
+1. 扩展类型 extends
+2. 交叉类型 &
+
+> 泛型对象类型
+- interface Box<Type> { contents: Type }; -- let box: Box<string>
+> 从类型中创建类型
+- 泛型类型
+  ```ts
+  1. function identity<Type>(arg: Type): Type{ return arg } let output = identity<stirng>("myString")
+  2. function identity<Type>(arg: Array<Type>): Type[]{ return arg } // 对泛型类型约束
+	3. interface GenericIdentityFn{
+		<Type>(arg: Type): Type;
+	}
+		 interface GenericIdentityFn<Type>{
+			 (arg: Type): Type
+		 }
+		 let myIntentity: GenericIdentity<string> = identity
+	```
+- 泛型类
+  ```ts
+		class GenericNumber<NumType>{
+			zeroValue: NumType;
+			add: (x: NumType, y: NumType) => NumType;
+		}
+
+		const generic = new GenericNumber<string>()
+		generic.zeroValue = "aaaa"
+		generic.add = (a, b) => {
+			return a + b
+		}
+	```
+- 泛型约束
+  ```ts
+	interface lengthwise{
+		length: number
+	}
+	function loggingIdentity<Type extends Lengthwise>(args: Type): Type{
+		return arg.length
+	}
+
+	loggingIdenttity("adf")
+
+	<!-- 泛型约束中使用类型参数 -->
+	function getProp<T, K extends keyof T>(obj: T, key: K){
+		return obj[key]
+	}
+	let obj = {
+		name: "zhangsan",
+		sex: "male",
+		age: 99
+	}
+
+	getProp(obj, age)
+	```
+- 泛型中使用类类型
+  ```ts
+	function create<Type>(c: {new(): Type}): Type{
+		return new c();
+	}
+	eg:
+		class BeeKeeper {
+			hasMask: boolean = true
+		}
+		class ZooKeeper {
+			nameTag: string = "zhan"
+		}
+		class Animal {
+			numlegs: number = 4
+		}
+
+		class Bee extends Animal {
+			keeper: BeeKeeper = new BeeKeeper()
+		}
+		class Lion extends Animal {
+			keeper: ZooKeeper = new ZooKeeper()
+		}
+
+		function createInstance<T extends Animal>(c: new () => T): T {
+			return new c()
+		}
+
+		createInstance(Lion).keeper.nameTag
+		createInstance(Bee).keeper.hasMask
+		createInstance(Bee).numlegs
+	```
+- keyof类型操作符
+  1. 
+- typeof类型操作符
+- 索引访问类型
+- 条件类型
+- 映射类型
+- 模板字面量类型
