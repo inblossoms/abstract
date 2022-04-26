@@ -402,37 +402,37 @@ type StrOrNumArr = ToArray<string | number>;
 ```
 > 类成员
 > - 类属性 以及 构造器
-	```ts
-	class P<T>{
-	x
-	y
-	constructor(prop: { x?: number; y?: number } = {}) {
-		this.x = prop.x
-		this.y = prop.y
+```ts
+class P<T>{
+x
+y
+constructor(prop: { x?: number; y?: number } = {}) {
+	this.x = prop.x
+	this.y = prop.y
+}
+count(x: number, y: number): number {
+	let c = x + y
+	return c
 	}
-	count(x: number, y: number): number {
-		let c = x + y
-		return c
-		}
-	}
-	let p = new P()
-	console.log(p.count(1, 2))
-	```
+}
+let p = new P()
+console.log(p.count(1, 2))
+```
 > - readonly
-	```ts
-	class P<T>{
-		readonly name: string = "zhangsan";
-		constructor(name?: string) {
-			if (name !== undefined) {
-				this.name = name
-			}
+```ts
+class P<T>{
+	readonly name: string = "zhangsan";
+	constructor(name?: string) {
+		if (name !== undefined) {
+			this.name = name
 		}
 	}
-	let p = new P<number>("lisi")
-	console.log(p.name);
-	let p2 = new P<string>()
-	console.log(p2.name);
-	```
+}
+let p = new P<number>("lisi")
+console.log(p.name);
+let p2 = new P<string>()
+console.log(p2.name);
+```
 
 > - 索引签名
 
