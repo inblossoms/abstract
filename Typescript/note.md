@@ -474,5 +474,14 @@ console.log(p2.name);
 > 1. Error： class MsgError extends Error {}
 > 2. 
 
+> 类成员修饰符
+> - public ： 公开的（默认值），任何对象在任何地方都可以访问
+> - protected ： 受保护的，可以在当前类或子类中进行访问
+> - private ： 私有的，当前类的私有属性
+> - static ： 静态成员
+>   - 避免使用： name length call 等等
+> 	- TS 中没有静态类的概念，因为我们还有函数和普通对象
+> 	- static #block :  静态区块，类内部的私有化属性，不被外部使用
+
 > 映射类型
 > 模板字面量类型

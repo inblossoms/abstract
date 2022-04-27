@@ -566,3 +566,15 @@ class P<T>{
 }
 let p = new P()
 console.log(p.count(1, 2))
+
+class A {
+
+	private x = 1
+	constructor(_prop: A) {
+
+	}
+
+	fun(_prop: A) {
+		return _prop.x
+	}
+}
