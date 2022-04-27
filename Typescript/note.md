@@ -435,6 +435,44 @@ console.log(p2.name);
 ```
 
 > - 索引签名
+```ts
+	class MyClass {
+		[s: string]: boolean | ((s: string) => boolean)
+
+		check(s: string){
+			return this[s] as boolean
+		}
+	}
+```
+
+> - 类继承- implements 子句 : 实现一个类去继承或者是实现一个接口
+> - 类继承- extends 子句：实现一个类继承另外一个类
+> - 类重写
+```ts
+	interface Voice {
+		voice(): void
+	}
+
+	class Animal {
+		yelp(): void
+	}
+
+	class Dog implements Voice{
+		voice(){
+			console.log("ping")
+		}
+	}
+
+	class Dog extends Animal{
+		// 子类如果和基类的方法重名 就相当于将基类的方法重写
+		yelp(y?: string){
+			// 
+		}
+	}
+```
+> 继承内置类型
+> 1. Error： class MsgError extends Error {}
+> 2. 
 
 > 映射类型
 > 模板字面量类型
