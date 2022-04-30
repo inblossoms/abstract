@@ -33,17 +33,3 @@ function fun(str) {
 // console.log(fun("aaa"));
 console.log(fun("#adf"));
 const u = 1;
-let obj1 = {
-    name: "asdf"
-};
-class One {
-    constructor() {
-        this.name = "zhangsan";
-    }
-    say() {
-        return `hello ${this.name}`;
-    }
-}
-const per = new One();
-per.name;
-per.say();
