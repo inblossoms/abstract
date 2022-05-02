@@ -93,7 +93,7 @@ type readonlyRes = Readonly1<{
 
 // pick 映射类型的语法用于构造新的索引类型，在构造的过程中可以对索引和值做一些修改或过滤。
 type pick1<T, k extends keyof T> = {
-	[p in k]: T<p>
+	[p in k]: T[p]
 }
 type pickRes = pick1<{
 	name: 'zhangsan',
@@ -116,8 +116,32 @@ type exclude<T, U> = T extends U ? never : T// 取差集
 
 type excludeRes = exclude<'a' | 'b' | 'c', 'a' | 'c'>
 
-// extract 与exclude相反，去交集
+// extract 与exclude相反，取交集
 type extract<T, U> = T extends U ? T : never
-
+type extractRes = extract<'a' | 'b' | 'c', 'a'>
 
 // omit pick可以取出索引类型的部分索引构造新的索引类型，反过来就是去掉这部分索引构造成新的索引类型
+type omit<
+	T, K extends keyof any
+	> = pick1<T, exclude<keyof T, K>>
+
+type omitRes = omit<{
+	name: 'zhangsan',
+	age: 33
+}, 'age'>
+
+// awaited Ts内置的提取valueType的高级类型
+type awaited<T> =
+	T extends null | undefined
+	? T
+	: T extends object & { then(unfulfilled: infer F): any }
+	? F extends ((value: infer V, ...args: any) => any)
+	? awaited<V> : never
+	: T
+
+type awaitedRes = awaited<Promise<Promise<Promise<number>>>>
+
+// nonNullable 判断是否为非空类型
+type nonNullable<T> = T extends null | undefined ? never : T
+
+type nonNullRes = nonNullable<null>
