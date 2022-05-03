@@ -45,7 +45,7 @@ type Subtract1<x extends number, y extends number> =
 type subtract1 = Subtract1<33, 22>
 
 
-// 联合分散课化简
+// 联合分散化简
 // Ts对于联合类型：1. 当遇到字符串的时候或者作为类型参数出现在条件类型左边时，会分散成单个的类型传入计算，最后把计算结果合并为联合类型。
 type union1 = 'a' | 'b' | 'c'
 type UppercaseC<i extends string> =
@@ -74,6 +74,8 @@ type isIndexSignatrue = IsIndexSignatrue<{
 // 基础扎实套路熟，类型体操可通关
 // parseQueryString 的类型例子，用来说明类型编程的复杂度。
 type res1 = ParsequeryString<"a=1&b=2&c=3">
+type res2 = ParsequeryString<'adsf'>
+
 
 type ParsequeryString<Str extends string> =
 	Str extends `${infer first}&${infer args}`
@@ -84,7 +86,7 @@ type ParseParam<Str extends string> =
 	Str extends `${infer key}=${infer value}`
 	? {
 		[k in key]: value
-	} : {}
+	} : Record<string, any>
 type parseParam = ParseParam<'z=1'> // 测试
 
 type MergerParams<
@@ -92,7 +94,7 @@ type MergerParams<
 	retObj extends Record<string, any>
 	> =
 	{
-		[
+		readonly [
 		key in keyof obj | keyof retObj
 		]:
 		key extends keyof obj
