@@ -32,7 +32,14 @@ stack.push({ name: 'zhangsan', mex: 'male' })
 
 // FIXME 类内部的原型属性类型问题未能解决
 // 以对象字面量的方式来作为数据结构的基础：
-class Stack_Obj {
+interface Istack<T> {
+  _data: Record<number, any>
+  push(node: T): void
+  pop(): T | undefined
+  peak(): T
+}
+
+class Stack_Obj<T> implements Istack<T> {
   #length: number
   _data: symbol
   constructor() {
