@@ -44,3 +44,54 @@ type UnionToTuple<T> = UnionToIntersection<
   ? [...UnionToTuple<Exclude<T, ReturnType>>, ReturnType]
   : [];
 type UnionToTupleRes = UnionToTuple<'a' | 'b' | 'c'>;
+
+// join
+// jion 返回值是一个函数，同样也具有类型参数；类型参数Items是返回的函数的参数类型
+declare function join<Delimiter extends string>(
+  delimiter: Delimiter,
+): <Items extends string[]>(...parts: Items) => JoinType<Items, Delimiter>;
+
+// joinType 的实现是根据字符串元组构造字符串，用到提取和构造。因为数量不确定需要递归
+// 类型参数分别是：item 字符串元组和delimiter 分割符类型。
+type JoinType<
+  Item extends any[],
+  Delimiter extends string,
+  Result extends string = '', // 保存结果
+> = Item extends [infer cur, ...infer Res]
+  ? JoinType<Res, Delimiter, `${Result}${Delimiter}${cur & string}`>
+  : RemoveFiestDelimiter<Result>;
+
+type RemoveFiestDelimiter<Str extends string> =
+  Str extends `${infer _}${infer Res}` ? Res : Str;
+
+let res = join('-')('zhang', 'san');
+
+// DeepCamelize 递归的把索引类型的key转成CamelCase的
+type DeepCamelize<Obj extends Record<string, any>> = Obj extends unknown[]
+  ? CamelizeAry<Obj>
+  : {
+      [key in keyof Obj as key extends `${infer first}_${infer res}`
+        ? `${first}${Capitalize<res>}`
+        : key]: DeepCamelize<Obj[key]>;
+    };
+
+// camelizeAry 递归处理每一个元素
+type CamelizeAry<Ary> = Ary extends [infer first, ...infer res]
+  ? [DeepCamelize<first>, ...CamelizeAry<res>]
+  : [];
+
+type obj = {
+  aaa_bbb: string;
+  bbb_ccc: [
+    {
+      ccc_ddd: string;
+    },
+    {
+      ddd_eee: string;
+      eee_fff: {
+        fff_ggg: string;
+      };
+    },
+  ];
+};
+type DeepCamelizeRes = DeepCamelize<obj>;
