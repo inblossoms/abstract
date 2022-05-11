@@ -95,3 +95,23 @@ type obj = {
   ];
 };
 type DeepCamelizeRes = DeepCamelize<obj>;
+
+// Defaultize
+type Defaultize<x, y> = Pick<x, Exclude<keyof x, keyof y>> &
+  Partial<Pick<x, Extract<keyof x, keyof y>>> &
+  Partial<Pick<y, Exclude<keyof y, keyof x>>>;
+
+type computed<Obj extends Record<string, any>> = {
+  [key in keyof Obj]: Obj[key];
+};
+
+type o = {
+  name: 'zhangsan';
+  age: 21;
+};
+
+type p = {
+  name: 'lisi';
+  sex: 'male';
+};
+type DefaultizeRes = computed<Defaultize<o, p>>;
