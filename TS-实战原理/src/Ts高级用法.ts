@@ -168,3 +168,45 @@ n = m ?? 10; // => let n = m !== null && void 0 ? n : 10
 
 // 数字分割符 _  : 设计主要是为了便于阅读，编译结果不会有_
 let number: number = 123_234_345;
+
+// NOTICE ThisType<> 的用法
+type ObjectConfigDesc<D, M> = {
+  data: D;
+  methods: M & ThisType<D & M>;
+};
+
+function makeObject<D, M>(config: ObjectConfigDesc<D, M>): D & M {
+  let data = config?.data || {};
+  let methods = config?.methods || {};
+  return {
+    ...data,
+    ...methods,
+  } as D & M;
+}
+
+let obj = makeObject({
+  data: { x: -1, y: 0 },
+  methods: {
+    moveBy(dx: number, dy: number) {
+      this.x += dx; // Strongly typed this
+      this.y += dy; // Strongly typed this
+    },
+  },
+});
+
+let options = makeObject({
+  data: {
+    x: -1,
+    y: -1,
+  },
+  methods: {
+    moveBy(dx: number, dy: number) {
+      this.x += dx;
+      this.y += dy;
+    },
+  },
+});
+
+options.x;
+options.y;
+options.moveBy(0, 1);
