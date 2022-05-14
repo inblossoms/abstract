@@ -238,3 +238,83 @@ const typeStr = typeof me;
 type perKey = keyof typeof me;
 
 // 遍历属性 in 只能用在类型定义中，可以对枚举类型进行遍历。
+
+// NOTICE 实战测试
+// NOTICE Q: 偏好使用 interface 还是 type 来定义类型？
+// A: 从用法上来说两者本质上没有区别，大家使用 React 项目做业务开发的话，主要就是用来定义 Props 以及接口数据类型。
+
+// 但是从扩展的角度来说，type 比 interface 更方便拓展一些，假如有以下两个定义：
+
+type Name = { name: string };
+interface IName {
+  name: string;
+}
+// 想要做类型的扩展的话，type 只需要一个&，而 interface 要多写不少代码。
+
+type Person1 = Name & { age: number };
+interface IPerson extends IName {
+  age: number;
+}
+// 另外 type 有一些 interface 做不到的事情，比如使用|进行枚举类型的组合，使用typeof获取定义的类型等等。
+
+// 不过 interface 有一个比较强大的地方就是可以重复定义添加属性，比如我们需要给window对象添加一个自定义的属性或者方法，那么我们直接基于其 Interface 新增属性就可以了。
+
+// declare global {
+//   interface Window {
+//     MyNamespace: any;
+//   }
+// }
+// 总体来说，大家知道 TS 是类型兼容而不是类型名称匹配的，所以一般不需用面向对象的场景或者不需要修改全局类型的场合，我一般都是用 type 来定义类型。
+
+// NOTICE Q: 是否允许 any 类型的出现
+// A: 说实话，刚开始使用 TS 的时候还是挺喜欢用 any 的，毕竟大家都是从 JS 过渡过来的，对这种影响效率的代码开发方式并不能完全接受，因此不管是出于偷懒还是找不到合适定义的情况，使用 any 的情况都比较多。
+
+// 随着使用时间的增加和对 TS 学习理解的加深，逐步离不开了 TS 带来的类型定义红利，不希望代码中出现 any，所有类型都必须要一个一个找到对应的定义，甚至已经丧失了裸写 JS 的勇气。
+
+// 这是一个目前没有正确答案的问题，总是要在效率和时间等等因素中找一个最适合自己的平衡。不过我还是推荐使用 TS，随着前端工程化演进和地位的提高，强类型语言一定是多人协作和代码健壮最可靠的保障之一，多用 TS，少用 any，也是前端界的一个普遍共识。
+
+// NOTICE Q: 类型定义文件(.d.ts)如何放置
+// A: 这个好像业界也没有特别统一的规范，我的想法如下：
+
+// 临时的类型，直接在使用时定义
+// 如自己写了一个组件内部的 Helper，函数的入参和出参只供内部使用也不存在复用的可能，可以直接在定义函数的时候就在后面定义。
+
+function format(input: { k: string }[]): number[] {
+  /***/
+}
+// 组件个性化类型，直接定义在 ts(x)文件中
+// 如 AntD 组件设计，每个单独组件的 Props、State 等专门定义了类型并 export 出去。
+
+// Table.tsx
+export type TableProps = {
+  /***/
+};
+export type ColumnProps = {
+  /***/
+};
+export default function Table() {
+  /***/
+}
+// 这样使用者如果需要这些类型可以通过 import type 的方式引入来使用。
+
+// 范围/全局数据，定义在.d.ts 文件中
+// 全局类型数据，这个大家毫无异议，一般根目录下有个 typings 文件夹，里面会存放一些全局类型定义。
+
+// 假如我们使用了 css module，那么我们需要让 TS 识别.less 文件(或者.scss)引入后是一个对象，可以如此定义：
+
+declare module '*.less' {
+  const resource: { [key: string]: string };
+  export = resource;
+}
+// 而对于一些全局的数据类型，如后端返回的通用的数据类型，我也习惯将其放在 typings 文件夹下，使用 Namespace 的方式来避免名字冲突，如此可以节省组件 import 类型定义的语句。
+
+declare namespace EdgeApi {
+  interface Department {
+    description: string;
+    gmt_create: string;
+    gmt_modify: string;
+    id: number;
+    name: string;
+  }
+}
+// 这样，每次使用的时候，只需要const department: EdgeApi.Department即可，节省了不少导入的精力。开发者只要能约定规范，避免命名冲突即可。
