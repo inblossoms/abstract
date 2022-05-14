@@ -210,3 +210,31 @@ let options = makeObject({
 options.x;
 options.y;
 options.moveBy(0, 1);
+
+// NOTICE 操作符
+// 键值的获取 keyof
+// keyof 可以获取一个类型所有键值，返回一个联合类型：
+type Animal = {
+  cat: '猫';
+  dog: '狗';
+  duck: '鸭';
+};
+
+type animal = keyof Animal; // animal 得到的类型为 'cat' | 'dog' | 'duck'
+// 利用keyof访问对象的key合法化，因为any做索引是不被接受的
+function getValue(params: Person, k: keyof Person) {
+  // return p[k];
+  // 如果 k 不如此定义，则无法以p[k]的代码格式通过编译
+}
+
+// 实例类型获取 typeof
+// typeof 是获取一个对象|实例的类型：
+const me: Persons = { name: 'zhangsan', age: 20 };
+type per = typeof me;
+const you: typeof me = { name: 'lisi', age: 21 };
+// typeof 只能用于具体的对象上，这与js中的typeof是一致的，并且他会根据左侧值自动决定应该执行那种行为
+const typeStr = typeof me;
+// typeof 和 keyof 一起使用
+type perKey = keyof typeof me;
+
+// 遍历属性 in 只能用在类型定义中，可以对枚举类型进行遍历。
