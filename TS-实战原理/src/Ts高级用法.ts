@@ -94,3 +94,77 @@ interface Baz {
 type All2 = Foo | Bar | Baz;
 // 然而他忘记了在 handleValue 里面加上针对 Baz 的处理逻辑，这个时候在 default branch 里面 val 会被收窄为 Baz，导致无法赋值给 never，产生一个编译错误。所以通过这个办法，你可以确保 handleValue 总是穷尽 (exhaust) 了所有 All 的可能类型。
 
+// NOTICE 运算符
+// as 类型断言
+/**
+ * 开发过程中，有时候你会遇到这种情况：
+ * 	你会比Ts更加了解某个值的详细信息。通常这会发生在你清楚的知道一个实体具体有比他现有类型更加准确的类型。
+ * 	通过类型断言这种方式告诉编译器：‘ 我知道我要做什么 ’。类型断言好比其他语言里的类型转换，但是不进行特殊的数据检查和结构。他没有运行时的影响，只是在编译阶段起作用。TS会假设你，程序员已经进行了必须的检查。
+ **/
+// 0. 尖括号语法：
+let someValue: any = 'this is a strihang';
+let strLength: number = (<string>someValue).length;
+// 1. as
+let someVal: any = 'this is a grammer for as';
+let strLen: number = (someVal as string).length;
+// 两种形式是等价的。至于使用哪种方式大多数是凭个人喜好的；然而当你在TS中使用jsx时，只有as是被允许的。
+// 实际场景：
+// TS不允许直接把确定的数据类型断言成另一个具体数据类型, 而是需要你首先去把这个类型断言成为一个unknown或者any这种不具体的,再把不具体的类型断言成另一个具体类型,这种规则可以防止不可能的强制转换;
+// 0.
+let num: number = 1323;
+let str: string = num as unknown as string;
+// 1.
+
+class Person {
+  sayHello() {
+    console.log('hello');
+  }
+}
+class Child extends Person {
+  sayWorld() {
+    console.log('世界');
+  }
+}
+// child.sayHello
+let c = new Child();
+c.sayHello(); //父类
+c.sayWorld();
+
+function fn(p: Person) {
+  p.sayHello();
+  (p as Child).sayWorld();
+}
+
+// 非空断言运算符 !
+// 这个运算符可以用在变量名或函数名之后，用来强调对应的元素是非 null | undefined
+function onClick(callback?: () => void) {
+  callback!(); // 参数是可选入参，铜鼓感叹号 ！ 之后，编译不会报错（es5没有非空判断）
+}
+// 这个符号的场景，特别适用于我们已经明确知道不会返回空值的场景，从而减少冗余的代码判断，如 React 的 Ref
+// function Demo(): JSX.Elememt {
+//   const divRef = useRef<HTMLDivElement>();
+//   useEffect(() => {
+//     divRef.current!.scrollIntoView();	 // 当组件Mount后才会触发useEffect，故current一定是有值的
+//   }, []);
+//   return <div ref={divRef}>Demo</div>
+// }
+
+// 可选链运算符  ?.
+// 相对于非断言运算符!，可选运算符作是开发者最需要的运行时（编译时同样有效）的非空判断
+let Obj = {
+  prop: 'arg',
+  index: 0,
+};
+Obj?.prop; // 编译器会生成=> Obj === null || Obj === void 0 ? void 0 : Obj.prop
+// undefined非严格模式下会被重新赋值，使用void 0必定返真正的undefined
+Obj?.['index'];
+// Obj?.(args);
+
+// 空值合并运算符 ??
+// ?? 与 || 的功能相似，区别在于 ??在左侧表达式结果为null 或者undefined时，才会返回右侧表达式。
+// || 表达式对false、''、 NaN、 0等逻辑空值也会生效，不适于我们做对参数的合并。
+let n, m;
+n = m ?? 10; // => let n = m !== null && void 0 ? n : 10
+
+// 数字分割符 _  : 设计主要是为了便于阅读，编译结果不会有_
+let number: number = 123_234_345;
