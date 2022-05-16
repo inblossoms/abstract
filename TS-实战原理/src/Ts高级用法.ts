@@ -160,6 +160,20 @@ Obj?.prop; // 编译器会生成=> Obj === null || Obj === void 0 ? void 0 : Obj
 Obj?.['index'];
 // Obj?.(args);
 
+const orderId1 = response.result.data.orderId;
+// 上面这种写法，很容易出现这种问题 orderId is undefined，稍微有些经验的我们立马就能想到，肯定是代码中 response.result.data 为 null 或者 undefined ，这样，你肯定获取不到 orderId。所以经验丰富的我们在遇到获取层级比较多的对象的时候，一般都是像下面这样写。
+
+// 正确的写法
+const orderId2 =
+  (response &&
+    response.result &&
+    response.result.data &&
+    response.result.data.orderId) ||
+  '';
+
+// 我们可以使用 ?. 来简化上面的代码。
+const orderId3 = response?.result?.data?.orderId || '';
+
 // 空值合并运算符 ??
 // ?? 与 || 的功能相似，区别在于 ??在左侧表达式结果为null 或者undefined时，才会返回右侧表达式。
 // || 表达式对false、''、 NaN、 0等逻辑空值也会生效，不适于我们做对参数的合并。
@@ -233,9 +247,10 @@ const me: Persons = { name: 'zhangsan', age: 20 };
 type per = typeof me;
 const you: typeof me = { name: 'lisi', age: 21 };
 // typeof 只能用于具体的对象上，这与js中的typeof是一致的，并且他会根据左侧值自动决定应该执行那种行为
-const typeStr = typeof me;
+const typeStr = {} as typeof me as object;
 // typeof 和 keyof 一起使用
-type perKey = keyof typeof me;
+type perKey = keyof typeof typeStr;
+type perKey1 = keyof typeof me;
 
 // 遍历属性 in 只能用在类型定义中，可以对枚举类型进行遍历。
 

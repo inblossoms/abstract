@@ -46,13 +46,13 @@ class Routers {
 			if (this.currentIndex < this.history.length - 1) {
 				this.history = this.history.slice(0, this.currentIndex + 1)
 			}
-			this.history.push(this.currentUrl)
-			this.currentIndex++
+			this.history.push(this.currentUrl)// 将当前的hash路由推入数组存储
+			this.currentIndex++ // 指针加一 后移
 		}
 
-		this.history.push(this.currentUrl) // 将当前的hash路由推入数组存储
-		this.currentIndex++ // 指针加一
-		this.routes[this.currentUrl]() // 执行当前hash路径的callback函数
+		this.routes[this.currentUrl]() // 执行当前hash路径的callback函数 
+		console.log('指针：', this.currentIndex, 'history：', this.history);
+		this.isBack = false
 	} // 刷新
 
 	backOff() {
@@ -66,5 +66,5 @@ class Routers {
 		location.hash = `#${this.history[this.currentIndex]}`
 		// 执行指针目前指向hash路由对应callback
 		this.routes[this.history[this.currentIndex]]()
-	}
+	} // 回退功能
 }
