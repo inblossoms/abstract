@@ -23,9 +23,11 @@ class Routers {
 		// 添加 监听对应事件
 		this.refresh = this.refresh.bind(this)
 		this.backOff = this.backOff.bind(this)
-
+		this.forward = this.forward.bind(this)
 		// 后退操作默认为false
 		this.isBack = false
+		// 前进操作默认为false
+		this.isForward = false
 
 		window.addEventListener('load', this.refresh, false)
 		window.addEventListener('hashchange', this.refresh, false)
@@ -48,11 +50,16 @@ class Routers {
 			}
 			this.history.push(this.currentUrl)// 将当前的hash路由推入数组存储
 			this.currentIndex++ // 指针加一 后移
+			this.isBack = false
+		}
+
+		if (this.isForward) {
+			this.currentIndex++
+			this.isForward = false
 		}
 
 		this.routes[this.currentUrl]() // 执行当前hash路径的callback函数 
 		console.log('指针：', this.currentIndex, 'history：', this.history);
-		this.isBack = false
 	} // 刷新
 
 	backOff() {
@@ -66,5 +73,43 @@ class Routers {
 		location.hash = `#${this.history[this.currentIndex]}`
 		// 执行指针目前指向hash路由对应callback
 		this.routes[this.history[this.currentIndex]]()
+
 	} // 回退功能
+
+	forward() {
+		this.isForward = true
+		//  如果指针指向大于数组长度 说明当前页面不存在继续回退浏览，所以当前索引应锁定在数组末位
+		if (this.currentIndex >= this.history.length - 1) {
+			(this.currentIndex = this.history.length - 1)
+			return
+		} else {
+			(this.currentIndex = this.currentIndex)
+		}
+		location.hash = `#${this.history[this.currentIndex + 1]}`
+
+		this.routes[this.history[this.currentIndex + 1]]()
+		console.log('指针：', this.currentIndex, 'forword：', this.history);
+	} // 前进
+
 }
+
+window.Router = new Routers();
+const content = document.querySelector('body');
+const buttonB = document.querySelectorAll('button')[0];
+const buttonF = document.querySelectorAll('button')[1]
+function changeBgColor(color) {
+	content.style.backgroundColor = color;
+}
+
+Router.route('/', function () {
+	changeBgColor('pink');
+});
+Router.route('/blue', function () {
+	changeBgColor('skyblue');
+});
+Router.route('/green', function () {
+	changeBgColor('green');
+});
+
+buttonB.addEventListener('click', Router.backOff, false);
+buttonF.addEventListener('click', Router.forward, false)

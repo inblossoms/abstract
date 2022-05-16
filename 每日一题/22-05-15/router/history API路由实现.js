@@ -27,3 +27,28 @@ class Routers {
 		});
 	}
 }
+
+window.Router = new Routers();
+Router.init(location.pathname);
+const content = document.querySelector('body');
+const ul = document.querySelector('ul');
+function changeBgColor(color) {
+	content.style.backgroundColor = color;
+}
+
+Router.route('/', function () {
+	changeBgColor('yellow');
+});
+Router.route('/blue', function () {
+	changeBgColor('skyblue');
+});
+Router.route('/green', function () {
+	changeBgColor('green');
+});
+
+ul.addEventListener('click', e => {
+	if (e.target.tagName === 'A') {
+		e.preventDefault();
+		Router.go(e.target.getAttribute('href'));
+	}
+});
