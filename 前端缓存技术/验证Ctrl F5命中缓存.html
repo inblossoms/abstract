@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo</title>
+</head>
+<body>
+    <div id="cache" style="width: 500px; height: 300px; color: red">
+        异步资源：
+        通过观察和分析，发现那些命中缓存的资源都是随着页面渲染而加载的，而不走缓存的则是等待页面加载完通过脚本异步插入到 DOM 中去的，于是便得到了资源异步加载命中缓存不受硬性重新加载控制的猜想。
+    </div>
+    <script>
+        window.onload = (function() {
+            setTimeout(function() {
+                // 异步加载背景图片
+                var a = document.getElementById("cache");
+                    a.style.backgroundImage= 'url(https://aecpm.alicdn.com/simba/img/TB183NQapLM8KJjSZFBSutJHVXa.jpg)';
+                
+                // 异步插入 JS 资源
+                var s = document.createElement('script');
+                    s.type = 'text/javascript';
+                    s.async = true;
+                    s.src = 'https://g.alicdn.com/mm/tanx-cdn/t/tanxssp.js?v=2';
+                    var x = document.getElementsByTagName('script')[0];
+                    x.parentNode.insertBefore(s, x);
+            }, 1000)
+        })
+    </script>
+</body>
+</html>
