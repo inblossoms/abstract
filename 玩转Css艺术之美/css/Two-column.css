@@ -1,0 +1,16 @@
+.container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.container .aside {
+  width: 25vw;
+  height: inherit;
+  background-color: seagreen;
+}
+
+.container .main {
+  flex: 1;
+  background-color: purple;
+}

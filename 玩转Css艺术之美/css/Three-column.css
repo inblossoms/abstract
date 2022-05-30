@@ -1,0 +1,20 @@
+.container {
+  display: flex;
+  width: 100vw;
+  height: 100vh;
+}
+
+.container .aside {
+  width: 15vw;
+  background-color: seagreen;
+}
+
+.container .main {
+  flex: 1;
+  background-color: rebeccapurple;
+}
+
+.container .banner {
+  width: 20vw;
+  background-color: sienna;
+}
