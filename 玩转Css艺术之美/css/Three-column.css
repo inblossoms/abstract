@@ -41,7 +41,7 @@
   font-size: 16px;
   text-align: center;
   content: attr(msg);
-  background-color: rgb(255, 255, 255);
+  background-color: rgb(96, 96, 96);
   transition: all 300ms;
 }
 

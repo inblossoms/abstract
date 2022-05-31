@@ -1,0 +1,34 @@
+.stript-loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.stript-loading li {
+  --time: calc(var(--line-index) * 200ms);
+  width: 6px;
+  height: 30px;
+  border-radius: 3px;
+  background-color: seagreen;
+  -webkit-animation: beat 1.5s ease-in-out var(--time) infinite;
+  animation: beat 1.5s ease-in-out var(--time) infinite;
+}
+
+@-webkit-keyframes beat {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.5);
+  }
+}
+
+@keyframes beat {
+  0%,
+  100% {
+    transform: scaleY(1);
+  }
+  50% {
+    transform: scaleY(0.5);
+  }
+}
