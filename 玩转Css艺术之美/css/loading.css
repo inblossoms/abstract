@@ -9,7 +9,7 @@
   --time: calc(var(--line-index) * 200ms);
   width: 5px;
   height: 30px;
-	margin-right: 3px;
+  margin-right: 3px;
   border-radius: 3px;
   background-color: seagreen;
   -webkit-animation: beat 1.5s ease-in-out var(--time) infinite;
