@@ -1,8 +1,10 @@
 // parseInt 遇上 map
-["1", "2", "3"].map(parseInt);
+console.log(["1", "2", "3"].map(parseInt));
+// parseInt作为map的回调 输出：[1, NAN, NAN]
 
 // 神奇的null
-[typeof null, null instanceof Object];
+console.log([typeof null, null instanceof Object]);
+// typeof null: object 是历史遗留问题；null 的原型链上没有 Object 的原型。输出：["object", false]
 
 // 愤怒的reduce
 [[3, 2, 1].reduce(Math.pow), [].reduce(Math.pow)];
