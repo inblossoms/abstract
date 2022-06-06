@@ -8,10 +8,12 @@ console.log([typeof null, null instanceof Object]);
 
 // 愤怒的reduce
 [[3, 2, 1].reduce(Math.pow), [].reduce(Math.pow)];
+// reduce 不能将empty 作为参数，输出：error
 
 // 该死的优先级
-var val = "smtg";
+var val = "smta";
 console.log("Value is" + (val === "smtg") ? "Something" : "Noting");
+// + 的优先级高于三目 Value is false作为三目的条件判断，输出：Something
 
 // 神鬼莫测的变量提升
 var name = "World!";
@@ -23,6 +25,7 @@ var name = "World!";
     console.log("Hello " + name);
   }
 })();
+// IIFE 的独立作用域，输出：Goodbye Jack
 
 // 死循环陷阱
 var END = Math.pow(2, 53);
@@ -32,6 +35,7 @@ for (var i = START; i <= END; i++) {
   count++;
 }
 console.log(count);
+// 2^53 是Js中的最大值，2^53+1 == 2^53；输出：error 栈溢出
 
 // 过滤器
 var ary = [0, 1, 2];
@@ -39,13 +43,15 @@ ary[10] = 10;
 ary.filter(function (x) {
   return x === undefined;
 });
+// 输出：[]
 
-// 警惕IEEE 754标准
+// 警惕IEEE 754标准: 双精度浮点数
 var two = 0.2;
 var one = 0.1;
 var eight = 0.8;
 var six = 0.6;
 [two - one == one, eight - six == two];
+// [true, false]
 
 // 字符串陷阱
 function showCase(value) {
@@ -64,6 +70,7 @@ function showCase(value) {
   }
 }
 showCase(new String("A"));
+// new String 会将 'A' 转换成 { 'A' }，switch内部使用 === 严格判断；输出：Do not know!
 
 function showCase(value) {
   switch (value) {
@@ -81,6 +88,7 @@ function showCase(value) {
   }
 }
 showCase(String("A"));
+// Case A
 
 // 并非都是奇偶
 function isOdd(num) {
@@ -97,14 +105,17 @@ function isSane(num) {
 
 var values = [7, 4, "13", -9, Infinity];
 values.map(isSane);
+// [true, true, true, false, false]
 
 // parseInt小贼
 parseInt(3, 8);
 parseInt(3, 2);
 parseInt(3, 0);
+// 3 NAN 3
 
 // 数组原型是数组
 Array.isArray(Array.prototype);
+// true
 
 // 一言难尽的强制转换
 var a = [0];
@@ -113,23 +124,28 @@ if ([0]) {
 } else {
   console.log("wut");
 }
+// 0 != 1, 输出：false
 
 // 撒旦之子“==”
-[] == [];
+[] == []; // false
 
 // 加号 VS 减号
 "5" + 3;
 "5" - 3;
+// '53' 2
 
 // 打死那个疯子
 1 + -+(+(+-+1));
+// 2
 
 // 淘气的map
 var ary = Array(3);
 ary[0] = 2;
-ary.map(function (elem) {
+let arr = ary.map(function (elem) {
   return "1";
 });
+console.log(arr);
+// ['1', undefined * 2]
 
 // 统统算我的
 function sidEffecting(ary) {
