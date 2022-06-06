@@ -159,30 +159,38 @@ function bar(a, b, c) {
 }
 
 bar(1, 1, 1);
+// 输出：21
 
 // 损失精度的IEEE 754
 var a = 111111111111111110000;
 var b = 1111;
 console.log(a + b);
+// a 的值致使精度丢失，输出：111111111111111110000
 
 // 反转世界
 var x = [].reverse;
 x();
+//
 
 // 最小的正值
 Number.MIN_VALUE > 0;
 
 // 谨记优先级
 [1 < 2 < 3, 3 < 2 < 1];
+// [true, true]
 
 // 坑爹中的战斗机
 // the most classic wtf
 2 == [[[2]]];
+// 根据ES5规范，如果比较的两个值中有一个是数字类型，就会尝试将另外一个值强制转换成数字，再进行比较。
+// true
 
 // 小数点魔术
 // 3.toString();
 (3).toString();
 // 3...toString();
+// 点运算符会被优先识别为数字常量的一部分，然后才是对象属性访问符。
+// error '3' error
 
 // 自动提升为全局变量
 (function () {
@@ -190,63 +198,72 @@ Number.MIN_VALUE > 0;
 })();
 console.log(y);
 console.log(x);
+// 1, undefined
 
 // 正则表达式实例
 var a = /123/;
 var b = /123/;
 a == b;
 a === b;
+// 每一个正则都是单独的实例；输出：false false
 
 // 数组也爱比大小
 var a = [1, 2, 3];
 var b = [1, 2, 3];
 var c = [1, 2, 4];
 
-a == b;
-a === b;
-a > c;
-a < c;
+a == b; // false
+a === b; // false
+a > c; // false
+a < c; // true
 
 // 原型把戏
 var a = {};
 var b = Object.prototype;
 
 [a.prototype === b, Object.getPrototypeOf(a) == b];
+// Object.getPrototypeOf 获取一个对象的原型； [false, true]
 
 // 构造函数的函数
 function f() {}
 var a = f.prototype;
 var b = Object.getPrototypeOf(f);
 a === b;
+// false
 
 // 禁止修改函数名
 function foo() {}
 var oldName = foo.name;
 foo.name = "bar";
 [oldName, foo.name];
+// 函数名无法被修改； [foo, foo]
 
-// 替换陷阱
+// 替换陷阱: 字符串空格
 "1 2 3".replace(/\d/g, parseInt);
+// 1 NAN 3
 
 // Function的名字
 function f() {}
 var parent = Object.getPrototypeOf(f);
-console.log(f.name);
-console.log(parent.name);
-console.log(typeof eval(f.name));
-console.log(typeof eval(parent.name));
+console.log(f.name); // f
+console.log(parent.name); // empty => Function.prototype
+console.log(typeof eval(f.name)); // function
+console.log(typeof eval(parent.name)); // undefined
+// eval('') 返回值是undefined
 
 // 正则测试陷阱
 var lowerCaseOnly = /^[a-z]+$/;
 [lowerCaseOnly.test(null), lowerCaseOnly.test()];
+// test 方法的参数如果不是字符串，会经过抽象 ToString操作强制转成字符串，因此实际上测试的是字符串 "null" 和 "undefined"。
 
 // A. [true, false]
 // B. error
-// C. [true, true]
+C: [(true, true)];
 // D. [false, true]
 
 // 逗号定义数组
 [, , ,].join(", ");
+//
 
 // 保留字 class
 var a = { class: "Animal", name: "Fido" };
@@ -256,20 +273,23 @@ console.log(a.class);
 var a = new Date("epoch");
 
 // 神鬼莫测的函数长度
-var a = Function.length;
-var b = new Function().length;
+var a = Function.length; // 1
+var b = new Function().length; // 0
 console.log(a === b);
+// false
 
 // Date的面具;
 var a = Date(0);
 var b = new Date(0);
 var c = new Date();
 [a === b, b === c, a === c];
+// false false false
 
 // min与max共舞
-var min = Math.min();
-var max = Math.max();
+var min = Math.min(); // infinity
+var max = Math.max(); // -infinity
 console.log(min < max);
+// false
 
 // 警惕全局匹配
 function captureOne(re, str) {
@@ -285,11 +305,15 @@ var numRe = /num=(\d+)/gi,
   a4 = captureOne(wordRe, "WORD=1");
 
 [a1 === a2, a3 === a4];
+// MDN关于 exec 方法的描述：当正则表达式使用 "g" 标志时，可以多次执行 exec 方法来查找同一个字符串中的成功匹配。当你这样做时，查找将从正则表达式的  lastIndex 属性指定的位置开始。
+// [true, false]
 
 // 最熟悉的陌生人
 var a = new Date("2014-03-19");
 var b = new Date(2014, 03, 19);
 [a.getDay() == b.getDay(), a.getMonth() == b.getMonth()];
+// 月份是从 0 开始的；.getDay()返回的是指定日期对象中一周中的第几天
+// [false, false]
 
 //  匹配隐式转换
 if ("http://giftwrapped.com/picture.jpg".match(".gif")) {
@@ -297,6 +321,8 @@ if ("http://giftwrapped.com/picture.jpg".match(".gif")) {
 } else {
   console.log("not a gif file");
 }
+// MDN对 match 方法的描述：如果传入一个非正则表达式对象，则会隐式地使用 new RegExp(obj)将其转换为正则表达式对象。
+// 'a gif file'
 
 // 重复声明变量
 function foo(a) {
@@ -310,3 +336,4 @@ function bar(a) {
 }
 
 [foo("hello"), bar("hello")];
+// ['hello', 'bye']
