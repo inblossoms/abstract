@@ -107,6 +107,20 @@
   }
 </style>
 
+<!-- js -->
+<script>
+  const tree = document.querySelector(".tree");
+
+  tree.addEventListener("click", (evt) => {
+    if (evt.target.tagName === "LI") {
+      if (evt.target.className === "expand") {
+        evt.target.className = "";
+      } else {
+        evt.target.className = "expand";
+      }
+    }
+  });
+</script>
 <!-- 省略其他代码 -->
 ```
 
@@ -116,3 +130,52 @@
 > - border-color: transparent 表示将这个伪元素的 4 个边框的颜色设置为透明色
 > - border-left-color: currentColor 表示将这个伪元素的左边框的颜色设置为当前元素的文字颜色
 > - transform: translateX(6px)表示将这个伪元素向右偏移 6px, 这样使得这个小三角和列表项的文字中间的间隔不至于太宽
+
+> **✨ 小练习：** 实现箭头、吃豆人图案；
+
+```html
+<!-- css -->
+<style>
+  .icon {
+    display: inline-block;
+    width: 0;
+    font-size: 0;
+    position: relative;
+    margin-right: 20px;
+  }
+
+  .pacman {
+    width: 0px;
+    height: 0px;
+    border: 50px solid red;
+    border-right: 50px solid transparent;
+    border-radius: 50%;
+  }
+
+  .arrow {
+    width: 180px;
+    height: 70px;
+    margin: 0 70px;
+    background-color: red;
+  }
+
+  .arrow::before {
+    position: absolute;
+    border: solid 35px transparent;
+    border-left-color: white;
+    content: "";
+  }
+
+  .arrow::after {
+    position: absolute;
+    right: -70px;
+    border: solid 35px transparent;
+    border-left-color: red;
+    content: "";
+  }
+</style>
+
+<!-- html -->
+<div class="icon arrow"></div>
+<div class="icon pacman"></div>
+```
