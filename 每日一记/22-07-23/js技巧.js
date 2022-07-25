@@ -114,10 +114,52 @@ person.sayName();
 const person = {
   name: "kapil",
   sayName: () => {
-    console.log(this);
     return this.name;
   },
 };
 
 let name = "glogal!!";
-console.log(person.sayName(), "-----");
+console.log(person.sayName(), "-----"); // node 环境没有 window： undefined
+
+// 12. 可选链：可选的链接?. 如果值再?之前，则停止评估。为undefined 或 null并返回。
+const user = {
+  employee: {
+    name: "zhangsan",
+  },
+};
+
+// console.log(user.employee?.name);
+console.log(user.employ.name);
+
+// 13. 通过内置的Math.random() 方法打乱数组；
+const list = [1, 2, 3, 4, 5, 6, 7];
+list.sort(() => {
+  return Math.random() - 0.5;
+});
+
+console.log(list);
+
+// 14. 空合并运算符 ??：当左侧操作数为空或未定义时返回其右侧操作数，否则返回其左侧操作数。
+const foo = null ?? "foo";
+
+const baz = 0 ?? 1;
+
+// 15. 单行回文检查
+function checkPalindrome(str) {
+  return str == str.split("").reverse().join("");
+}
+
+console.log(checkPalindrome("adsfsda"));
+
+// 16. 将 Object 属性转成属性数组
+// 使用Object.entries(),Object.keys()和Object.values()
+const obj = { a: 1, b: 2, c: 3 };
+
+Object.entries(obj);
+(3)[(Array(2), Array(2), Array(2))];
+
+Object.keys(obj);
+(3)[("a", "b", "c")];
+
+Object.values(obj);
+(3)[(1, 2, 3)];
