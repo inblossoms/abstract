@@ -121,7 +121,8 @@ const person = {
 let name = "glogal!!";
 console.log(person.sayName(), "-----"); // node 环境没有 window： undefined
 
-// 12. 可选链：可选的链接?. 如果值再?之前，则停止评估。为undefined 或 null并返回。
+// 12. 可选链：可选的链接?.
+// 通过使用 ?. 操作符取代 . 操作符，JavaScript 会在尝试访问 adventurer.cat.name 之前，先隐式地检查并确定 adventurer.cat 既不是 null 也不是 undefined 。如果 adventurer.cat 是 null 或者 undefined ，表达式将会短路计算直接返回 undefined。
 const user = {
   employee: {
     name: "zhangsan",
@@ -130,6 +131,29 @@ const user = {
 
 // console.log(user.employee?.name);
 console.log(user.employ.name);
+// Tip
+// 添加请求拦截器
+axios.interceptors.request.use(
+  function (config) {
+    // 在发送请求之前做些什么
+    //目标: 统一携带token
+    //判断本地有token 再携带，判断具体api / index.js 里如果没有携带Authorization，我再添加上去
+    //未定义叫undefiend ，null 具体的值你得赋予才叫空
+    //判断getoken 的长度
+    //？. 可选链操作符，如果前面对象里没有length，整个表达式原地返回unndefined
+    //如果getToken()原地有值 token 字符串, 才能调用length获取长度
+    if (getToken()?.length > 0 && config.headers.Authorization === undefined) {
+      config.headers.Authorization = `Bearer ${getToken()}`;
+      console.log(config);
+    }
+    console.log(config);
+    return config;
+  },
+  function (error) {
+    // 对请求错误做些什么
+    return Promise.reject(error);
+  }
+);
 
 // 13. 通过内置的Math.random() 方法打乱数组；
 const list = [1, 2, 3, 4, 5, 6, 7];
