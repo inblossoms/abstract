@@ -187,3 +187,59 @@ Object.keys(obj);
 
 Object.values(obj);
 (3)[(1, 2, 3)];
+
+// 17. 解构：当对象具有多个层，通过解构针对嵌套属性
+const user = {
+  name: "User",
+  age: 21,
+  address: {
+    country: "china",
+    postalCode: "11111",
+  },
+};
+
+const {
+  address: { country }, // 接收地址对象中的某个值
+  address: addressMsg, // 接收整个地址对象
+  sex = "male", // 解构潜在的空值
+} = user;
+
+console.log(country);
+console.log(addressMsg);
+console.log(sex);
+
+// 在内循环中解构
+const users = [
+  {
+    name: "Chris",
+    age: 33,
+  },
+  {
+    name: "Yaatree",
+    age: 2,
+  },
+];
+
+for (let { name, age } of users) {
+  console.log(`User: ${name} is ${age} years old ❗`);
+}
+
+// 动态名称解构：假设用户单击一个按钮，请允许他们从对象中提取随机属性
+const getProperty = "name"; // or 'age'
+// How do we get this from the user now?
+const { [getProperty]: returnValue } = user;
+
+console.log(returnValue); // Chris
+
+// 从函数中解够
+const getProduct = () => {
+  return {
+    id: 1233,
+    name: "Macbook",
+  };
+};
+
+const product = getProduct();
+console.log(product);
+const { id, name } = getProduct();
+console.log("id:", id, "name:", name);
